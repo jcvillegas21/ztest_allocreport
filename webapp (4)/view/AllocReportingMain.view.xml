@@ -226,12 +226,12 @@
 
                     <!-- TAB 2: ORDER BASED -->
                     <IconTabFilter id="AllocReportorderBasedTab" key="Order" text="Sales Dimension" >             
-                         <smartTable:SmartTable id="orderBased_idSmartTable" tableType="ResponsiveTable" exportType="GW" enableExport="true" useVariantManagement="false" smartFilterId=""
-                        useTablePersonalisation="true" header="EventBased" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored"
+                         <smartTable:SmartTable id="orderBased_idSmartTable" entitySet="ZV_CE_ORDER" tableType="ResponsiveTable" exportType="GW" enableExport="true" useVariantManagement="false" smartFilterId=""
+                        useTablePersonalisation="true" header="OrderBased" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored"
                         enableAutoBinding="true" class="sapUiResponsiveContentPadding" enableAutoColumnWidth="true" showTablePersonalisation="true"
                         editTogglable="false" width="100%"  customizeConfig="{'autoColumnWidth': {'*': {'min': 1, 'max': 10, 'gap': 1, 'truncateLabel': false}}}"
                         initiallyVisibleFields="Matnr,MaterialName,Ean,Plant,vkorg,vtweg,Market,Zzcustgrp,Kunnr,CustomerName,StartDate,EndDate,Pap,BckConsum,EvtOwner,EventId"
-                        dataReceived="onDataReceived" beforeRebindTable="onBeforeRebindTable" initialise="onSmartTableInitialise" uiStateChange="onUIStateChange">
+                        dataReceived="onDataReceived" beforeRebindTable="onBeforeRebindTable">
                         <smartTable:customToolbar>
                         <OverflowToolbar id="OB_IDGenOverflowToolbar1">
                         
