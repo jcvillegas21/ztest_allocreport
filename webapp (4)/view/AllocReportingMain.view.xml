@@ -1,0 +1,358 @@
+<mvc:View controllerName="com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.controller.AllocReportingMain"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:comp="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+    xmlns:t.rowmodes="sap.ui.table.rowmodes"
+    xmlns:uxap="sap.uxap"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"   
+   
+    
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:suite="sap.suite.ui.commons"
+    height="100%" 
+    >
+    <f:DynamicPage id="AllocReport_IDGenDynamicPage" class="sapUiNoContentPadding" >
+        <f:title>
+            <f:DynamicPageTitle id="AllocReport_IDGenDynamicPageTitle" >
+                <f:heading>
+                    
+                
+                </f:heading>
+               <f:actions>
+                    <smartVariantManagement:SmartVariantManagement id="AllocReportid_allocrpt_svm" persistencyKey="PageVariantPKey" showExecuteOnSelection="true"/>
+                    <SearchField id="AllocReportglobalSearchField" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/>
+                    <ToolbarSpacer id="AllocReport_IDGenToolbarSpacer2" />
+               </f:actions> 
+               
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader id="AllocReport_IDGenDynamicPageHeader" pinnable="true">
+                 <!-- <SearchField id="AllocReportglobalSearchField" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/> -->
+             <!--Characteristic Selection-->
+                <comp:FilterBar id="AllocReportfilterbar" filterBarExpanded="true" useToolbar="false" persistencyKey="myPersKey" search="onSearch" clear="onClear" showClearOnFB="true">
+                    <comp:filterGroupItems>
+                       <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem" groupName="__$INTERNAL$" name="Characteristics" label="Characteristics Selection" visibleInFilterBar="true">
+                             <comp:control>
+                                 <MultiInput id="AllocReportcharacteristicsSelectionInput" showValueHelp="true" valueHelpRequest="onCharacteristicsValueHelp" editable="true"  />
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+            <!--Time Bucket Type--> 
+                <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem2" groupName="__$INTERNAL$" name="TimeBucketType" label="Time Bucket Type" visibleInFilterBar="true"
+                visible="{= !${viewModel>/isOrderBasedTab} }">
+                             <comp:control>
+                                 <!-- <MultiInput id="AllocReporttimeBucketTypeInput" showValueHelp="false" valueHelpRequest="onTimeBucketTypeVH" editable="true" /> -->
+                                <ComboBox id="AllocReporttimeBucketTypeInput" value="{filterModel>/timeBucketType}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem1" key="Month" text="Month" />
+                                        <core:Item id="AllocReport_IDGenItem2" key="Week" text="Week" />
+                                    </items>
+                                </ComboBox> 
+                             </comp:control>
+                        </comp:FilterGroupItem>    
+
+             <!--Allocation Sequence-->            
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem3" groupName="__$INTERNAL$" name="AllocationSequence" label="Allocation Sequence" visibleInFilterBar="true">
+                             <comp:control>
+                                 <!-- <MultiInput id="AllocReportallocationSequenceInput" showValueHelp="false" valueHelpRequest="onAllocationSequenceVH" editable="true" /> -->
+                                <ComboBox id="AllocReportallocationSequenceInput" selectedKey="{filterModel>/allocSeq}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem3" key="ZPASWMS" text="ZPASWMS" />
+                                        <core:Item id="AllocReport_IDGenItem4" key="ZPASWMM" text="ZPASWMM" />
+                                        <core:Item id="AllocReport_IDGenItem5" key="ZPASMMS" text="ZPASMMS" />
+                                        <core:Item id="AllocReport_IDGenItem6" key="ZPASMMM" text="ZPASMMM" />
+                                        <core:Item id="AllocReport_IDGenItem7" key="ZPASWES" text="ZPASWES" />
+                                        <core:Item id="AllocReport_IDGenItem8" key="ZPASMMM" text="ZPASMMM" />
+                                        <core:Item id="AllocReport_IDGenItem9" key="ZPASWEM" text="ZPASWEM" />
+                                        <core:Item id="AllocReport_IDGenItem10" key="ZPASMEM" text="ZPASMEM" />
+                                    </items>
+                                </ComboBox>    
+                            </comp:control>
+                        </comp:FilterGroupItem>
+            <!--Event Reason-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem4" groupName="__$INTERNAL$" name="EventReason" label="Event Reason" visibleInFilterBar="true"
+                          visible="{= !${viewModel>/isOrderBasedTab} }">
+                             <comp:control>
+                                 
+                            <ComboBox 
+                                id="AllocReporteventReasonInput"
+                                value="{filterModel>/eventReason}"
+                                width="350px"
+                                placeholder="Search by reason or description..."
+                                showSecondaryValues="true"
+                                filterSecondaryValues="true"
+                                items="{
+                                        path: 'eventReasonModel>/EventReasons',
+                                        sorter: { path: 'text'}}"
+                                change="onFilterChanged" >
+                                <!-- DEFINE a template for each item -->
+                                <core:ListItem id="AllocReport_IDGenListItem" key="{eventReasonModel>key}" text="{eventReasonModel>text}" additionalText="{eventReasonModel>key}"/>
+                            </ComboBox>
+                            </comp:control>
+                        </comp:FilterGroupItem>
+            <!--Allocation UoM-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem5" groupName="__$INTERNAL$" name="AllocationUoM" label="Alternative Allocation UoM" visibleInFilterBar="true">
+                             <comp:control>
+                                  <!-- <MultiInput id="AllocReportallocationUoMInput" showValueHelp="false" valueHelpRequest="onAllocationUoMVH" editable="true" /> -->
+                                <!-- <ComboBox id="AllocReportallocationUoMInput" selectedKey="{filterModel>/allocUom}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem11" key="CS" text="CS" />
+                                        <core:Item id="AllocReport_IDGenItem12" key="IT" text="IT" />
+                                    </items>
+                                </ComboBox>  -->
+                                <Input id="AllocReportallocationUoMInput"
+                                    value="{filterModel>/allocUom}"
+                                    showValueHelp="true"
+                                    valueHelpRequest="onUomValueHelp"
+                                    change="onFilterChanged"/>
+                             </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Deletion Flag-->           
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItemDelFlag" groupName="__$INTERNAL$" name="DeletionFlag" label="Deletion Flag" visibleInFilterBar="true">
+                             <comp:control>
+                                 <ComboBox id="AllocReportdeletionFlagSelect" selectedKey="{filterModel>/deletionFlag}" change="onFilterChanged">
+                                     <items>
+                                         <core:Item id="AllocReport_IDGenItemActive" key="Active" text="Active Records" />
+                                         <core:Item id="AllocReport_IDGenItemDeleted" key="Deleted" text="Deleted Records" />
+                                         <core:Item id="AllocReport_IDGenItemAll" key="All" text="All Records" />
+                                     </items>
+                                 </ComboBox>
+                             </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Event Validity Date-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem6" groupName="__$INTERNAL$" name="EventValidityRange" label="Event Validity Range" visibleInFilterBar="true">
+                             <comp:control>
+                                <DateRangeSelection id="AllocReporteventValidityRangeInput"   
+                                dateValue="{filterModel>/eventValidity/from}"
+                                secondDateValue="{filterModel>/eventValidity/to}"
+                                change="onFilterChanged"/>
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Event Time Bucket Period-->
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem7" groupName="__$INTERNAL$" name="CVCTimeBucketPeriod" label="CVC Time Bucket Period" visibleInFilterBar="true">
+                             <comp:control>
+                                <!-- <MultiInput id="AllocReportcvcTimeBucketPeriodInput" showValueHelp="true" valueHelpRequest="onCVCTimeBucketPeriodVH" editable="true" /> -->
+                                <DateRangeSelection id="AllocReportcvcTimeBucketPeriodInput" 
+                                dateValue="{filterModel>/cvcTimeBucket/from}"
+                                secondDateValue="{filterModel>/cvcTimeBucket/to}"
+                                change="onFilterChanged" />
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+                     </comp:filterGroupItems>
+                </comp:FilterBar>  
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+             <IconTabBar
+                id="AllocReporticonTabBar"
+                class="sapUiNoContentPadding"
+                select="onTabSelect"      
+                stretchContentHeight="true"
+		        applyContentPadding="false"              
+                 >                          
+                   <items>
+                    <!-- TAB 1: EVENT BASED -->
+                    <IconTabFilter id="AllocReporteventBasedTab" key="Event" text="Event+CVC Dimension" >                      
+                        <smartTable:SmartTable id="eventBased_idSmartTable" tableType="ResponsiveTable" exportType="GW" enableExport="true" useVariantManagement="false" smartFilterId=""
+                        useTablePersonalisation="true" header="EventBased" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored"
+                        enableAutoBinding="true" class="sapUiResponsiveContentPadding" enableAutoColumnWidth="true" showTablePersonalisation="true"
+                        entitySet="AllocReportEvent" editTogglable="false" width="100%"  customizeConfig="{'autoColumnWidth': {'*': {'min': 1, 'max': 10, 'gap': 1, 'truncateLabel': false}}}"
+                        initiallyVisibleFields="Matnr,MaterialName,Ean,Plant,vkorg,vtweg,Market,Zzcustgrp,Kunnr,CustomerName,StartDate,EndDate,Pap,BckConsum,EvtOwner,EventId"
+                        beforeRebindTable="onBeforeRebindTable" initialise="onSmartTableInitialise" uiStateChange="onUIStateChange">
+                        <smartTable:customToolbar>
+                        <OverflowToolbar id="eventBased_IDGenOverflowToolbar1">
+                        
+                            <ToolbarSpacer id="eventBased_IDGenToolbarSpacer1"/>
+                             <Button id= "AllocReportshowDetailsButton" text="Show Details" type="Emphasized" enabled="false" press=".onShowDetailsPress" />
+                             <Button id="AllocReport_IDGenButton" icon="sap-icon://download" tooltip="Download" press="onDownload"/>
+                             <Button id="AllocReport_IDGenButton1" icon="sap-icon://edit" tooltip="Edit" press="onEdit"/>
+                            <Button id="AllocReportz_pal_cockipit_help_button" enabled="true" text="Help" press="onHelpBtnPressed" icon="sap-icon://sys-help" tooltip="Help" class="helpBtn"/>	
+                        </OverflowToolbar>
+                    </smartTable:customToolbar>
+
+                <t:Table id="AllocReporteventBasedTable" class="sapUiSmallMarginTop" selectionMode="MultiToggle" rowActionCount="1"  selectionBehavior="Row" rowSelectionChange=".onRowSelectionChange" rowMode="Auto" >
+                    <!-- <t:columns> -->
+                        <!-- <t:Column id="_IDGenColumn"  >
+                            <Label id="_IDGenLabel" text="Status"></Label>
+                                <t:template>
+                                    <core:Icon id="_IDGenIcon" src="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter:'formatter.setJobStatusIcon'}"
+                                    color="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter: 'formatter.runJobStatusIconColor'}"/>
+                                </t:template>
+                                <t:customData>
+                                    <core:CustomData key="p13nData"	value='\{"columnKey": "Status", "leadingProperty": "Status", "autoColumnWidth": \{ "min": 1, "max": 5 }, "columnIndex": 5}' />
+                                </t:customData>
+                        </t:Column>
+
+                        <t:Column id="_IDGenColumn1"  >
+                                <Label id="_IDGenLabel2" text="Logs Link"></Label>
+                                <t:template>
+                                    <Link id="_IDGenLink" text="{path:'Loghandle', formatter:'formatter.showLogLink'}" press="onShowLogLink"/>
+                                </t:template>
+                                <t:customData>
+                                <core:CustomData key="p13nData"
+                                        value='\{"columnKey": "ShowLog", "autoColumnWidth": \{ "min": 1, "max": 3 }, "columnIndex": 11}' />
+                                </t:customData>
+                                        
+                        </t:Column> -->
+                            
+                    <!-- </t:columns> -->
+                            
+                    <!-- <t:rowActionTemplate >
+                        <t:RowAction id="_IDGenRowAction1"  >
+                            <t:RowActionItem id="_IDGenRowActionItem1"  text="{path: 'Loghandle'}" type="Navigation" visible="true" press="onRowActionItemSelect">
+                            
+                            </t:RowActionItem>
+                        </t:RowAction>
+                    </t:rowActionTemplate > -->
+
+                        </t:Table>
+                        <smartTable:layoutData>
+                            <FlexItemData id="_IDGenFlexItemData1" growFactor="1" baseSize="0%"/>
+                        </smartTable:layoutData>
+                    </smartTable:SmartTable>
+
+                    </IconTabFilter>
+
+                    <!-- TAB 2: ORDER BASED -->
+                    <IconTabFilter id="AllocReportorderBasedTab" key="Order" text="Sales Dimension" >             
+                         <smartTable:SmartTable id="orderBased_idSmartTable" tableType="ResponsiveTable" exportType="GW" enableExport="true" useVariantManagement="false" smartFilterId=""
+                        useTablePersonalisation="true" header="EventBased" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored"
+                        enableAutoBinding="true" class="sapUiResponsiveContentPadding" enableAutoColumnWidth="true" showTablePersonalisation="true"
+                        editTogglable="false" width="100%"  customizeConfig="{'autoColumnWidth': {'*': {'min': 1, 'max': 10, 'gap': 1, 'truncateLabel': false}}}"
+                        initiallyVisibleFields="Matnr,MaterialName,Ean,Plant,vkorg,vtweg,Market,Zzcustgrp,Kunnr,CustomerName,StartDate,EndDate,Pap,BckConsum,EvtOwner,EventId"
+                        dataReceived="onDataReceived" beforeRebindTable="onBeforeRebindTable" initialise="onSmartTableInitialise" uiStateChange="onUIStateChange">
+                        <smartTable:customToolbar>
+                        <OverflowToolbar id="OB_IDGenOverflowToolbar1">
+                        
+                            <ToolbarSpacer id="OB_IDGenToolbarSpacer1"/>
+                            
+                        </OverflowToolbar>
+                    </smartTable:customToolbar>
+
+                <t:Table id="AllocReportorderBasedTable" class="sapUiSmallMarginTop" selectionMode="None" rowActionCount="1"  selectionBehavior="Row" visibleRowCountMode="Auto">
+                    <!-- <t:columns> -->
+                        <!-- <t:Column id="_IDGenColumn"  >
+                            <Label id="_IDGenLabel" text="Status"></Label>
+                                <t:template>
+                                    <core:Icon id="_IDGenIcon" src="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter:'formatter.setJobStatusIcon'}"
+                                    color="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter: 'formatter.runJobStatusIconColor'}"/>
+                                </t:template>
+                                <t:customData>
+                                    <core:CustomData key="p13nData"	value='\{"columnKey": "Status", "leadingProperty": "Status", "autoColumnWidth": \{ "min": 1, "max": 5 }, "columnIndex": 5}' />
+                                </t:customData>
+                        </t:Column>
+
+                        <t:Column id="_IDGenColumn1"  >
+                                <Label id="_IDGenLabel2" text="Logs Link"></Label>
+                                <t:template>
+                                    <Link id="_IDGenLink" text="{path:'Loghandle', formatter:'formatter.showLogLink'}" press="onShowLogLink"/>
+                                </t:template>
+                                <t:customData>
+                                <core:CustomData key="p13nData"
+                                        value='\{"columnKey": "ShowLog", "autoColumnWidth": \{ "min": 1, "max": 3 }, "columnIndex": 11}' />
+                                </t:customData>
+                                        
+                        </t:Column> -->
+                            
+                    <!-- </t:columns> -->
+                            
+                    <!-- <t:rowActionTemplate >
+                        <t:RowAction id="_IDGenRowAction1"  >
+                            <t:RowActionItem id="_IDGenRowActionItem1"  text="{path: 'Loghandle'}" type="Navigation" visible="true" press="onRowActionItemSelect">
+                            
+                            </t:RowActionItem>
+                        </t:RowAction>
+                    </t:rowActionTemplate > -->
+
+                        </t:Table>
+                        <smartTable:layoutData>
+                            <FlexItemData id="OB_IDGenFlexItemData1" growFactor="1" baseSize="0%"/>
+                        </smartTable:layoutData>
+                    </smartTable:SmartTable>
+                    </IconTabFilter>
+
+                    <IconTabFilter id="AllocReportChartTab" key="Chart" text="Allocation Overview" >
+                    <content>
+                        <l:Splitter id="chartSplitter" orientation="Horizontal" width="100%" height="100%">
+                            <l:contentAreas>
+                                <suite:ChartContainer id="donutChartContainer" autoAdjustHeight="true" showPersonalization="true" showZoom="true" wrapLabels="true" showSelectionDetails="true" showFullScreen="true"
+                                                    title="Allocation Status"  >
+                                      
+                                    <suite:content>
+                                        <suite:ChartContainerContent id="_IDGenChartContainerContent1" icon="sap-icon://donut-chart" title="Allocation Status" >                      
+                                            <suite:content>
+                                                <viz:VizFrame id="allocationStatusChart"
+                                                    uiConfig="{applicationSet:'fiori'}"
+                                                     vizType='donut' >
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset" data="{chartModel>/results}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition" name="Status" value="{chartModel>Status}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition" name="Count" value="{chartModel>Count}" />
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition1" name="Criticality" value="{chartModel>Criticality}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem id='sizeFeed' uid="size" type="Measure" values="Count" />
+                                                        <viz.feeds:FeedItem id='colorFeed' uid="color" type="Dimension" values="Status" />
+                                                    </viz:feeds>
+                                            </viz:VizFrame>
+                                            </suite:content>
+                                        </suite:ChartContainerContent>
+                                    </suite:content>
+                                </suite:ChartContainer>
+
+                                <suite:ChartContainer id="barChartContainer" autoAdjustHeight="true" showPersonalization="true" showZoom="true" wrapLabels="true" showSelectionDetails="true" showFullScreen="true"
+                                 title="Allocation by Product Category" >
+                                     
+                                        
+                                    
+                                    <suite:content>
+                                        <suite:ChartContainerContent id="_IDGenChartContainerContent2" icon="sap-icon://bar-chart" title="Allocation by Product Category">
+                                            <suite:content>
+                                                <viz:VizFrame id="productCategoryChart"
+                                                    uiConfig="{applicationSet:'fiori'}"
+                                                     vizType='bar' >
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset1" data="{barChartModel>/results}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition1" name="ProductCategory" value="{barChartModel>ProductCategory}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition2" name="TotalAllocation" value="{barChartModel>TotalAllocation}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem id="_IDGenFeedItem" uid="valueAxis" type="Measure" values="TotalAllocation" />
+                                                        <viz.feeds:FeedItem id="_IDGenFeedItem1" uid="categoryAxis" type="Dimension" values="ProductCategory" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </suite:content>
+                                        </suite:ChartContainerContent>
+                                    </suite:content>
+                                </suite:ChartContainer>
+
+                            </l:contentAreas>
+                        </l:Splitter>
+                    </content>
+                </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>
