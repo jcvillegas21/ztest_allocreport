@@ -1,9 +1,0 @@
-{
-    "EventReasons": [
-        { "key": "Other Reason", "text": "OTHERS" },
-        { "key": "Price Constraint",  "text": "PRICE" },
-        { "key": "Promotion",  "text": "PROMO" },
-        { "key": "Supply Constraint", "text": "SUPPLY" }
-    ]
-   
-}
