@@ -44,11 +44,19 @@ sap.ui.define([
             this.getView().setModel(new JSONModel(), "chartModel");
              // *** 1. ADD NEW MODEL FOR THE BAR CHART ***
             this.getView().setModel(new JSONModel(), "barChartModel");
-             var oModel =this.getOwnerComponent().getModel('orderModel');
-              var smartTbl = this.getView().byId("orderBased_idSmartTable");
-                smartTbl.setModel(oModel);
-                smartTbl.setEntitySet('ZV_CE_ORDER');
-                smartTbl.rebindTable(true);
+            var oModel =this.getOwnerComponent().getModel('orderModel');
+            var smartTbl = this.getView().byId("orderBased_idSmartTable");
+            smartTbl.setModel(oModel);
+                // smartTbl.setEntitySet('ZV_CE_ORDER');
+               // smartTbl.setModel(oModel);
+               // smartTbl.rebindTable(true);
+
+            //   // Flag to track if orderbased data has been loaded
+            // this._bOrderDataLoaded = false;
+            // // Flag to track if chart data has been loaded
+            //  this._bChartDataLoaded = false;
+            //  // Property to hold the filter from the "Show Details" press
+            //  this._oOrderDetailsFilter = null;
 
             
             // this._oPersoServiceEvent = AllocReportPersTable.generatePersonalisationService(this.byId("AllocReporteventBasedTable"), this);
@@ -58,7 +66,8 @@ sap.ui.define([
             // this._oTPCOrder = new TablePersoController({ table: this.byId("AllocReportorderBasedTable"), persoService: this._oPersoServiceOrder });
 
             
-          
+          // This array will hold the binding contexts of all selected rows
+            this._aSelectedEventContexts = [];
 
 
         },
@@ -67,11 +76,7 @@ sap.ui.define([
             },
         onAfterRendering : function(){
 
-            //  // Instantiate your custom variant control
-            // this._customVariant = new customVariant(this.createId("customVariant"), {
-            //     persistencyKey: "commanKey"
-            // });
-            
+
             // Link the SmartVariantManagement control to your custom control
             var oPersInfoFilter = new PersonalizableInfo({
                 keyName: "persistencyKey",
@@ -94,9 +99,6 @@ sap.ui.define([
             
 
            
-            // // *** 2. TRIGGER THE INITIAL DATA LOAD ***
-            // oEventTable.setBusy(true);
-            // this.loadTableData(oEventTable, false);
             // Configure donut chart
             const oDonutChart = this.byId("allocationStatusChart");
             oDonutChart.setVizProperties({ 
@@ -118,33 +120,8 @@ sap.ui.define([
                     // Red, Orange, Green
                     colorPalette: ["#e74c3c", "#f39c12", "#2ecc71"]
                 }
-                /* ... donut chart properties ... */ });
-        //  // Configure the chart properties
-        //     var oChart = this.byId("allocationStatusChart");
-        //     oChart.setVizProperties({
-        //         legend: {
-        //             title: {
-        //                 visible: false
-        //             }
-        //         },
-        //         title: {
-        //             visible: true,
-        //             text: 'Product Allocation Order Items by Status'
-        //         },
-        //         plotArea: {
-        //             dataLabel: {
-        //                 visible: true,
-        //               //  formatString: '0'
-        //                 type: 'value' 
-        //             },
-        //             // Red, Orange, Green
-        //             colorPalette: ["#e74c3c", "#f39c12", "#2ecc71"]
-        //         }
-                 
-                
-        //     });
-            // var oPopOver = this.getView().byId("idPopOver");
-            // oPopOver.connect(oChart.getVizUid());
+               });
+     
                
                  // *** 4. CONFIGURE THE NEW BAR CHART ***
             const oBarChart = this.byId("productCategoryChart");
@@ -156,26 +133,101 @@ sap.ui.define([
                 }
             });
 
-             // *** NEW: Trigger chart update on initial load ***
-            var oEventTable = this.byId("eventBased_idSmartTable");
-         //   var oEventBinding = oEventTable.getRows();
-            oEventTable.attachEventOnce("dataReceived", () => {
-                 this._updateDonutChartData();
-                this._updateBarChartData(); // Call the new function
-                oEventTable.setBusy(false);
+           // *** MODIFICATION START ***
+            var oEventSmartTable = this.byId("eventBased_idSmartTable");
+
+            // Attach an event listener that will fire ONCE after the initial data is loaded
+            oEventSmartTable.attachEventOnce("dataReceived", () => {
+                this._updateDonutChartData();
+                this._updateBarChartData();
             });
-           
                 this.onSearch();
-           
+            // Trigger the initial data load for the event-based table
+          //  oEventSmartTable.rebindTable();
+            // *** MODIFICATION END ***
     },
-    // onBeforeRebindTable:function()
-    // {
-    //         this.onSearch();     
-    // },
-        /**
-         * Gathers the current state of filters and table layouts to be saved in a variant.
-         * @returns {object} A JSON object representing the complete variant state.
-         */
+        onBeforeRebindTable:function(oEvent) {
+        var oBindingParams = oEvent.getParameter("bindingParams");
+        var oFilterData = this.getView().getModel("filterModel").getData();
+        var bIsOrderBasedTab = this.getView().getModel("viewModel").getProperty("/isOrderBasedTab");
+        
+        // if (oEvent.getSource().getId().includes("orderBased_idSmartTable") && this._oOrderDetailsFilter) {
+        //     oBindingParams.filters.push(this._oOrderDetailsFilter);
+        //     this._oOrderDetailsFilter = null; // Clear the filter after applying it
+        // }
+
+        // Determine which table is triggering the event by its ID
+        var sSourceId = oEvent.getSource().getId();
+        var bIsOrderBasedTable = sSourceId.includes("orderBased_idSmartTable");
+
+    //    // If the "Show Details" filter is active for the order table,
+    //     // apply ONLY that filter and then exit the function.
+    //     if (bIsOrderBasedTable && this._oOrderDetailsFilter) {
+    //         oBindingParams.filters.push(this._oOrderDetailsFilter);
+    //         this._oOrderDetailsFilter = null; // Clear the filter for subsequent searches
+    //         return; // Exit to prevent other filters from being added
+    //     }
+
+        var aFinalFilters = [];
+        var oCharacteristics = oFilterData.characteristicsData;
+        Object.keys(oCharacteristics.include).forEach(sField => {
+            if (oCharacteristics.include[sField] && oCharacteristics.include[sField].length > 0) {
+                aFinalFilters.push(new Filter({ filters: oCharacteristics.include[sField].map(sValue => new Filter(sField, FilterOperator.EQ, sValue)), and: false }));
+            }
+        });
+        Object.keys(oCharacteristics.exclude).forEach(sField => {
+             if (oCharacteristics.exclude[sField] && oCharacteristics.exclude[sField].length > 0) {
+                aFinalFilters.push(new Filter({ filters: oCharacteristics.exclude[sField].map(sValue => new Filter(sField, FilterOperator.NE, sValue)), and: false }));
+            }
+        });
+        // if (!bIsOrderBasedTab && oFilterData.deletionFlag && oFilterData.deletionFlag !== "All") {
+        //     if (oFilterData.deletionFlag === "Active") {
+        //         aFinalFilters.push(new Filter({ filters: [new Filter("DelFlag", FilterOperator.NE, "X"), new Filter("DelFlag", FilterOperator.EQ, null), new Filter("DelFlag", FilterOperator.EQ, "")], and: false }));
+        //     } else if (oFilterData.deletionFlag === "Deleted") {
+        //         aFinalFilters.push(new Filter("DelFlag", FilterOperator.EQ, "X"));
+        //     }
+        // }
+        // Only apply these filters if the event is from the event-based table
+        if (!bIsOrderBasedTable) {
+            if (oFilterData.deletionFlag && oFilterData.deletionFlag !== "All") {
+                if (oFilterData.deletionFlag === "Active") {
+                    aFinalFilters.push(new Filter({ filters: [new Filter("DelFlag", FilterOperator.NE, "X"), new Filter("DelFlag", FilterOperator.EQ, null), new Filter("DelFlag", FilterOperator.EQ, "")], and: false }));
+                } else if (oFilterData.deletionFlag === "Deleted") {
+                    aFinalFilters.push(new Filter("DelFlag", FilterOperator.EQ, "X"));
+                }
+            }
+            // if (oFilterData.timeBucketType) {
+            //     aFinalFilters.push(new Filter("TimeBucketType", FilterOperator.EQ, oFilterData.timeBucketType));
+            // }
+            // if (oFilterData.eventReason) {
+            //     aFinalFilters.push(new Filter("EventId", FilterOperator.EQ, oFilterData.eventReason));
+            // }
+        }
+         if (!bIsOrderBasedTab && oFilterData.timeBucketType) aFinalFilters.push(new Filter("TimeBucketType", FilterOperator.EQ, oFilterData.timeBucketType));
+        if (oFilterData.allocSeq) aFinalFilters.push(new Filter("Pap", FilterOperator.EQ, oFilterData.allocSeq));
+        if (oFilterData.eventReason) aFinalFilters.push(new Filter("EventId", FilterOperator.EQ, oFilterData.eventReason));
+        if (oFilterData.allocUom) aFinalFilters.push(new Filter("Meins", FilterOperator.EQ, oFilterData.allocUom));
+        if (oFilterData.eventValidity && oFilterData.eventValidity.from && oFilterData.eventValidity.to) {
+            aFinalFilters.push(new Filter("StartDate", FilterOperator.GE, oFilterData.eventValidity.from));
+            aFinalFilters.push(new Filter("EndDate", FilterOperator.LE, oFilterData.eventValidity.to));
+        }
+        if (oFilterData.cvcTimeBucket && oFilterData.cvcTimeBucket.from && oFilterData.cvcTimeBucket.to) {
+            aFinalFilters.push(new Filter("TimeBucketPeriod", FilterOperator.BT, oFilterData.cvcTimeBucket.from, oFilterData.cvcTimeBucket.to));
+        }
+
+        oBindingParams.filters.push(new Filter({
+            filters: aFinalFilters,
+            and: true
+        }));
+
+        if (oFilterData.allocUom) {
+            if(!oBindingParams.parameters.custom) {
+                oBindingParams.parameters.custom = {};
+            }
+            oBindingParams.parameters.custom.P_UoM = oFilterData.allocUom;
+        }
+
+    },
         onVariantFetchData: function () {
 
              
@@ -195,7 +247,7 @@ sap.ui.define([
          * Applies a saved variant state to all filters and tables.
          * @param {object} oState - The JSON object containing the saved variant state.
          */
-        onVariantApplyData: function (oState) { debugger;
+        onVariantApplyData: function (oState) { 
 
            const isEmpty = (obj) => {return Object.keys(obj).length === 0;};
            
@@ -248,7 +300,7 @@ sap.ui.define([
        
         },
       
-        onFilterChanged: function () {debugger;
+        onFilterChanged: function () {
             this.handleVariantModification(true);
         },
 
@@ -279,7 +331,7 @@ sap.ui.define([
         /**
          * Notifies the Variant Management that a change has occurred.
          */
-        handleVariantModification: function (bIsModified) { debugger;
+        handleVariantModification: function (bIsModified) { 
              if (this._oSmartVariantManagement) {
                 this._oSmartVariantManagement.currentVariantSetModified(bIsModified);
             }
@@ -290,7 +342,7 @@ sap.ui.define([
             var oTPC = bIsOrderBasedTab ? this._oTPCOrder : this._oTPCEvent;
             
             oTPC.openDialog();
-            if (oTPC._oDialog) { debugger;
+            if (oTPC._oDialog) { 
               oTPC._oDialog.detachConfirm(this._onUITblColumnPersoDonePressed, this);
                 oTPC._oDialog.attachConfirm(this._onUITblColumnPersoDonePressed, this);
            
@@ -308,7 +360,7 @@ sap.ui.define([
         },
 
         //global search logic
-        onGlobalSearch: function(oEvent) { debugger;
+        onGlobalSearch: function(oEvent) { 
             var sQuery = oEvent.getParameter("newValue");
                 var oViewModel = this.getView().getModel("viewModel");
                 var bIsOrderBased = oViewModel.getProperty("/isOrderBasedTab");
@@ -364,7 +416,7 @@ sap.ui.define([
          * NEW: Processes event table data and updates the chart model.
          * @private
          */
-        _updateDonutChartData: function () { debugger;
+        _updateDonutChartData: function () { 
             const oTable = this.byId("AllocReporteventBasedTable");
             const oBinding = oTable.getBinding("rows");
             if (!oBinding) return;
@@ -416,7 +468,7 @@ sap.ui.define([
         },
        
         // *** 2. CREATE THE NEW FUNCTION TO PROCESS BAR CHART DATA ***
-        _updateBarChartData: function() { debugger;
+        _updateBarChartData: function() { 
             const oTable = this.byId("AllocReporteventBasedTable");
             const oBinding = oTable.getBinding("rows");
             if (!oBinding) return;
@@ -451,216 +503,59 @@ sap.ui.define([
         },
 
         onSearch: function () {
-            // var oViewModel = this.getView().getModel("viewModel");
-            // var bIsOrderBasedTab = oViewModel.getProperty("/isOrderBasedTab");
-            // var oTable = bIsOrderBasedTab ? this.byId("AllocReportorderBasedTable") : this.byId("AllocReporteventBasedTable");
-            // var oBinding = oTable.getBinding("rows");
-            // oTable.setBusy(true);
-        
+         
+            // // Clear the details filter when performing a new search
+            // this._oOrderDetailsFilter = null;
 
-
-            // // Attach a one-time event listener to handle actions after data is received.
-            // oBinding.attachEventOnce("dataReceived", () => {
-            //     // If it's the event table, update the chart.
-            //     if (!bIsOrderBasedTab) {
-            //         this._updateChartData();
-            //     }
-            //     // Set the table back to not busy.
-            //     oTable.setBusy(false);
-            // });
-            
-            // // Trigger the server-side filtering. The binding will automatically handle the data request.
-            // this.loadTableData(oTable, bIsOrderBasedTab);
-             var oViewModel = this.getView().getModel("viewModel");
-            var oFilterData = this.getView().getModel("filterModel").getData();
+            var oViewModel = this.getView().getModel("viewModel");
             var bIsOrderBasedTab = oViewModel.getProperty("/isOrderBasedTab");
-
-            var oTable = bIsOrderBasedTab ? this.byId("AllocReportorderBasedTable") : this.byId("AllocReporteventBasedTable");
-            var sPath = bIsOrderBasedTab ? "orderModel>/ZV_CE_ORDER" : "/AllocReportEvent";
-
-            oTable.setBusy(true);
-
-            // --- 1. Build Standard Filters ---
-            var aFinalFilters = [];
-            var oCharacteristics = oFilterData.characteristicsData;
-            Object.keys(oCharacteristics.include).forEach(sField => {
-                if (oCharacteristics.include[sField] && oCharacteristics.include[sField].length > 0) {
-                    aFinalFilters.push(new Filter({ filters: oCharacteristics.include[sField].map(sValue => new Filter(sField, FilterOperator.EQ, sValue)), and: false }));
-                }
-            });
-            Object.keys(oCharacteristics.exclude).forEach(sField => {
-                 if (oCharacteristics.exclude[sField] && oCharacteristics.exclude[sField].length > 0) {
-                    aFinalFilters.push(new Filter({ filters: oCharacteristics.exclude[sField].map(sValue => new Filter(sField, FilterOperator.NE, sValue)), and: false }));
-                }
-            });
-            if (!bIsOrderBasedTab && oFilterData.deletionFlag && oFilterData.deletionFlag !== "All") {
-                if (oFilterData.deletionFlag === "Active") {
-                    aFinalFilters.push(new Filter({ filters: [new Filter("DelFlag", FilterOperator.NE, "X"), new Filter("DelFlag", FilterOperator.EQ, null), new Filter("DelFlag", FilterOperator.EQ, "")], and: false }));
-                } else if (oFilterData.deletionFlag === "Deleted") {
-                    aFinalFilters.push(new Filter("DelFlag", FilterOperator.EQ, "X"));
-                }
-            }
-             if (!bIsOrderBasedTab && oFilterData.timeBucketType) aFinalFilters.push(new Filter("TimeBucketType", FilterOperator.EQ, oFilterData.timeBucketType));
-            if (oFilterData.allocSeq) aFinalFilters.push(new Filter("Pap", FilterOperator.EQ, oFilterData.allocSeq));
-            if (oFilterData.eventReason) aFinalFilters.push(new Filter("EventId", FilterOperator.EQ, oFilterData.eventReason));
-            if (oFilterData.allocUom) aFinalFilters.push(new Filter("Meins", FilterOperator.EQ, oFilterData.allocUom));
-            if (oFilterData.eventValidity && oFilterData.eventValidity.from && oFilterData.eventValidity.to) {
-                aFinalFilters.push(new Filter("StartDate", FilterOperator.GE, oFilterData.eventValidity.from));
-                aFinalFilters.push(new Filter("EndDate", FilterOperator.LE, oFilterData.eventValidity.to));
-            }
-            if (oFilterData.cvcTimeBucket && oFilterData.cvcTimeBucket.from && oFilterData.cvcTimeBucket.to) {
-                aFinalFilters.push(new Filter("TimeBucketPeriod", FilterOperator.BT, oFilterData.cvcTimeBucket.from, oFilterData.cvcTimeBucket.to));
-            }
-
-
-            // --- 2. Define Binding Parameters (with Custom UoM) ---
-            var oBindingParams = {
-                filters: aFinalFilters,
-                parameters: {
-                    operationMode: 'Server',
-                    countMode: 'Inline',
-                    custom: {}
-                }
-            };
-
-            if (oFilterData.allocUom) {
-                oBindingParams.parameters.custom.P_UoM = oFilterData.allocUom;
-            }
+            var oSmartTable = bIsOrderBasedTab ? this.byId("orderBased_idSmartTable") : this.byId("eventBased_idSmartTable");
 
             if (!bIsOrderBasedTab) {
-                oBindingParams.parameters.select = 'ProdAllocPeriodLoadInPercent';
-            }
-
-
-            // --- 3. Re-bind the table to trigger the new data request ---
-            oTable.bindRows({
-                path: sPath,
-                parameters: oBindingParams.parameters,
-                filters: oBindingParams.filters
-            });
-        var oEventTable = this.byId("eventBased_idSmartTable");
-          //  var oBinding = oEventTable.getRows();
-            oEventTable.attachEventOnce("dataReceived", () => {
-                if (!bIsOrderBasedTab) {
+                oSmartTable.attachEventOnce("dataReceived", () => {
                     this._updateDonutChartData();
                     this._updateBarChartData();
-                }
-                oTable.setBusy(false);
-            });
-            
+                });
+            }
+        
+            oSmartTable.rebindTable();
         
         },
 
-        // loadTableData: function (oTable, bIsOrderBasedTab) {
-          
-        //     var oBinding = oTable.getBinding("rows");
-        //     var aFinalFilters = [];
-        //     var oFilterData = this.getView().getModel("filterModel").getData();
-
-        //     // --- 1. Build from Characteristics Dialog ---
-        //     var oCharacteristics = oFilterData.characteristicsData;
-        //     var aIncludeFilters = [];
-        //     Object.keys(oCharacteristics.include).forEach(sField => {
-        //         const aValues = oCharacteristics.include[sField];
-        //         if (aValues && aValues.length > 0) {
-        //             const aFieldFilters = aValues.map(sValue => new Filter(sField, FilterOperator.EQ, sValue));
-        //             aIncludeFilters.push(new Filter({ filters: aFieldFilters, and: false }));
-        //         }
-        //     });
-        //     if (aIncludeFilters.length > 0) {
-        //         aFinalFilters.push(new Filter({ filters: aIncludeFilters, and: true }));
-        //     }
-        //     var aExcludeFilters = [];
-        //     Object.keys(oCharacteristics.exclude).forEach(sField => {
-        //         const aValues = oCharacteristics.exclude[sField];
-        //         if (aValues && aValues.length > 0) {
-        //             const aFieldFilters = aValues.map(sValue => new Filter(sField, FilterOperator.NE, sValue));
-        //             aExcludeFilters.push(new Filter({ filters: aFieldFilters, and: false }));
-        //         }
-        //     });
-        //     if (aExcludeFilters.length > 0) {
-        //         aFinalFilters.push(new Filter({ filters: aExcludeFilters, and: true }));
-        //     }
-            
-        //     // --- 2. Build from single FilterBar fields ---
-        //     if (!bIsOrderBasedTab && oFilterData.deletionFlag && oFilterData.deletionFlag !== "All") {
-        //         if (oFilterData.deletionFlag === "Active") {
-        //              aFinalFilters.push(new Filter({
-        //                 filters: [
-        //                     new Filter("DelFlag", FilterOperator.NE, "X"),
-        //                     new Filter("DelFlag", FilterOperator.EQ, null),
-        //                     new Filter("DelFlag", FilterOperator.EQ, "")
-        //                 ], and: false
-        //             }));
-        //         } else if (oFilterData.deletionFlag === "Deleted") {
-        //             aFinalFilters.push(new Filter("DelFlag", FilterOperator.EQ, "X"));
-        //         }
-        //     }
-        //     if (!bIsOrderBasedTab && oFilterData.timeBucketType) {
-        //         aFinalFilters.push(new Filter("TimeBucketType", FilterOperator.EQ, oFilterData.timeBucketType));
-        //     }
-        //     if (oFilterData.allocSeq) {
-        //         aFinalFilters.push(new Filter("Pap", FilterOperator.EQ, oFilterData.allocSeq));
-        //     }
-        //     if (oFilterData.eventReason) {
-        //         aFinalFilters.push(new Filter("EventId", FilterOperator.EQ, oFilterData.eventReason));
-        //     }
-        //     if (oFilterData.allocUom) {
-        //         aFinalFilters.push(new Filter("Meins", FilterOperator.EQ, oFilterData.allocUom));
-        //     }
-        //     if (oFilterData.eventValidity && oFilterData.eventValidity.from && oFilterData.eventValidity.to) {
-        //          aFinalFilters.push(new Filter("StartDate", FilterOperator.GE, oFilterData.eventValidity.from));
-        //          aFinalFilters.push(new Filter("EndDate", FilterOperator.LE, oFilterData.eventValidity.to));
-        //     }
-        //     if (oFilterData.cvcTimeBucket && oFilterData.cvcTimeBucket.from && oFilterData.cvcTimeBucket.to) {
-        //         aFinalFilters.push(new Filter("TimeBucketPeriod", FilterOperator.BT, oFilterData.cvcTimeBucket.from, oFilterData.cvcTimeBucket.to));
-        //     }
-
-        //     // --- 3. Apply all filters to the binding ---
-        //     // This single filter call will be translated into a $filter query string for the OData service
-        //     oBinding.filter(new Filter({
-        //         filters: aFinalFilters,
-        //         and: true
-        //     }));
-        // },
-
+        
 
         /**
          * Handles the 'select' event of the IconTabBar.
          * When a tab is selected, it updates the view model to show/hide the correct filters.
          * @param {sap.ui.base.Event} oEvent The event object
          */
-        onTabSelect: function(oEvent) { debugger;
-           const sSelectedKey = oEvent.getParameter("key");
-            this.getView().getModel("viewModel").setProperty("/isOrderBasedTab", sSelectedKey === "Order");
-
-            // // If the user selects the chart tab, force the charts to resize and render.
-            // if (sSelectedKey === "Chart") {
-            //     // Use a short timeout to ensure the tab content is visible in the DOM before resizing.
-            //     setTimeout(() => {
-            //         const oDonutChart = this.byId("allocationStatusChart");
-            //         const oBarChart = this.byId("productCategoryChart");
-                    
-            //         window.getComputedStyle(oDonutChart.getDomRef()).height;
-            //         window.getComputedStyle(oBarChart.getDomRef()).height;
-
-            //         // ...and then notifies the chart's internal library that it needs to resize.
-            //         oDonutChart.vizUpdate({
-            //             'properties': {
-            //                 'legend': { 'visible': false } // Re-apply a property to force redraw
-            //             }
-            //         });
-            //          oBarChart.vizUpdate({
-            //             'properties': {
-            //                 'legend': { 'visible': false } // Re-apply a property to force redraw
-            //             }
-            //         });
-            //     }, 0);
+        onTabSelect: function(oEvent) { 
+          // const sSelectedKey = oEvent.getParameter("key");
+         //   this.getView().getModel("viewModel").setProperty("/isOrderBasedTab", sSelectedKey === "Order");
+            // *** MODIFICATION START ***
+        
+            // const sSelectedKey = oEvent.getParameter("key");
+            // this.getView().getModel("viewModel").setProperty("/isOrderBasedTab", sSelectedKey === "Order");
+        
+            // // If the "Order" tab is selected and the data hasn't been loaded yet, load it.
+            // if (sSelectedKey === "Order" && !this._bOrderDataLoaded) {
+            //     this.byId("orderBased_idSmartTable").rebindTable();
+            //     this._bOrderDataLoaded = true; // Set the flag to true after loading
+            // } else if (sSelectedKey === "Chart" && !this._bChartDataLoaded) {
+            //     // *** MODIFICATION START ***
+            //     // Update charts when the "Chart" tab is selected for the first time
+            //     this._updateDonutChartData();
+            //     this._updateBarChartData();
+            //     this._bChartDataLoaded = true;
+            //     // *** MODIFICATION END ***
             // }
-            // If the user selects the chart tab, invalidate the charts to force a redraw.
-            // if (sSelectedKey === "Chart") {
-            //     this.byId("allocationStatusChart").invalidate();
-            //     this.byId("productCategoryChart").invalidate();
+            const sSelectedKey = oEvent.getParameter("key");
+            this.getView().getModel("viewModel").setProperty("/isOrderBasedTab", sSelectedKey === "Order");
+        
+            // if (sSelectedKey === "Chart" && !this._bChartDataLoaded) {
+            //     this._updateDonutChartData();
+            //     this._updateBarChartData();
+            //     this._bChartDataLoaded = true;
             // }
         },
          /**
@@ -786,7 +681,7 @@ sap.ui.define([
          * It reads all tokenized values from the visible MultiInput controls, updates the central
          * filter model, and then updates the summary tokens on the main filter bar.
          */
-        onCharacteristicsDialogOk: function() { debugger;
+        onCharacteristicsDialogOk: function() { 
             var oCharData = { include: {}, exclude: {} }; // Temporary storage for the dialog's data
             var bIsOrderBasedTab = this.getView().getModel("viewModel").getProperty("/isOrderBasedTab");
             var oView = this.getView();
@@ -843,7 +738,7 @@ sap.ui.define([
             this.onFilterChanged();
         },
 
-        _updateCharacteristicsTokens: function() { debugger;
+        _updateCharacteristicsTokens: function() { 
             var aTokens = [];
             var oCharacteristics = this.getView().getModel("filterModel").getProperty("/characteristicsData");
             
@@ -961,10 +856,13 @@ sap.ui.define([
          */
         onRowSelectionChange: function (oEvent) {
             const oTable = oEvent.getSource();
-            const iSelectedIndexCount = oTable.getSelectedIndices().length;
+            const aSelectedIndices = oTable.getSelectedIndices();
             const oButton = this.byId("AllocReportshowDetailsButton");
 
-            oButton.setEnabled(iSelectedIndexCount > 0);
+            oButton.setEnabled(aSelectedIndices.length > 0);
+
+            // Store the full context of all selected rows every time the selection changes
+             this._aSelectedEventContexts = aSelectedIndices.map(iIndex => oTable.getContextByIndex(iIndex));
         },
         /**
          * Filters the Order Based table and switches the tab view.
@@ -972,32 +870,32 @@ sap.ui.define([
         onShowDetailsPress: function () {
 
 
-             const oEventTable = this.byId("eventBased_idSmartTable").getTable();//this.byId("AllocReporteventBasedTable");
+            //  const oEventTable = this.byId("eventBased_idSmartTable").getTable();
+            // // 2. Get the selected indices from the PLUGIN
+            // const aSelectedIndices = oEventTable.getSelectedIndices();
             
-            // 1. Get the MultiSelectionPlugin from the table's dependents
-            // const oPlugin = oEventTable.getDependents().find(function(oDependent) {
-            //     return oDependent.isA("sap.ui.table.plugins.MultiSelectionPlugin");
-            // });
-
-            // if (!oPlugin) {
-            //     // Failsafe in case the plugin is not found
-            //     console.error("MultiSelectionPlugin not found on the event table.");
-            //     return;
+            // if (aSelectedIndices.length === 0) {
+            //     return; // Exit if nothing is selected
             // }
 
-            // 2. Get the selected indices from the PLUGIN
-            const aSelectedIndices = oEventTable.getSelectedIndices();
-            
-            if (aSelectedIndices.length === 0) {
-                return; // Exit if nothing is selected
+            // // 3. Get the CvcUuids from the selected rows (this logic remains the same)
+            // const aSelectedCvcs = aSelectedIndices.map(iIndex => {
+            //     const oContext = oEventTable.getContextByIndex(iIndex);
+            //     return oContext ? oContext.getProperty("CvcUuid") : null;
+            // }).filter(sCvc => sCvc !== null); // Filter out any potential nulls if a context is not found
+            // Use the stored contexts from the onRowSelectionChange event
+            if (!this._aSelectedEventContexts || this._aSelectedEventContexts.length === 0) {
+                return;
             }
 
-            // 3. Get the CvcUuids from the selected rows (this logic remains the same)
-            const aSelectedCvcs = aSelectedIndices.map(iIndex => {
-                const oContext = oEventTable.getContextByIndex(iIndex);
+            const aSelectedCvcs = this._aSelectedEventContexts.map(oContext => {
                 return oContext ? oContext.getProperty("CvcUuid") : null;
-            }).filter(sCvc => sCvc !== null); // Filter out any potential nulls if a context is not found
+            }).filter(sCvc => sCvc !== null);
 
+            if (aSelectedCvcs.length === 0) {
+                return;
+            }
+            // *** MODIFICATION END ***
             // 4. Create and apply the filter (this logic remains the same)
             const aFilters = aSelectedCvcs.map(sCvc => {
                 return new Filter("CharcValueCombinationUUID", FilterOperator.EQ, sCvc);
@@ -1007,6 +905,11 @@ sap.ui.define([
             const oOrderTable = this.byId("AllocReportorderBasedTable");
             const oBinding = oOrderTable.getBinding("rows");
             oBinding.filter(oCombinedFilter);
+
+            // // Store the filter and rebind the table
+            // this._oOrderDetailsFilter = new Filter({ filters: aFilters, and: false });
+            // this.byId("orderBased_idSmartTable").rebindTable();
+            // this._bOrderDataLoaded = true;
             
             // 5. Switch the IconTabBar to the "Order Based" tab (this logic remains the same)
             const oIconTabBar = this.byId("AllocReporticonTabBar");
