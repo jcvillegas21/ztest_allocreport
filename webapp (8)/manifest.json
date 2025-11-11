@@ -1,0 +1,210 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.18.5",
+      "toolsId": "20323c13-43c0-4ca3-b0fe-03d0ce546c58"
+    },
+    "dataSources": {
+      "ZV_API_EVENTBSD_O2": {
+        "uri": "/sap/opu/odata/sap/ZV_API_EVENTBSD_O2/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/ZV_API_EVENTBSD_O2/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "ZV_API_ORDERBSD_02": {
+        "uri": "/sap/opu/odata/sap/ZV_API_ORDERBSD_02/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/ZV_API_ORDERBSD_02/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "ZV_SRVACCESSUI": {
+        "uri": "/sap/opu/odata4/sap/zv_ui_prodsubstaccessaatp_04/srvd/sap/zv_srvaccessui/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/ZV_SRVACCESSUI/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "ZV_UI_ALLCONTROL_O2": {
+        "uri": "/sap/opu/odata/sap/ZV_UI_ALLCONTROL_O2/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/ZV_UI_ALLCONTROL_O2/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "eventReason": {
+        "uri": "model/simpleFilterApp.json",
+        "type": "JSON"
+      },
+      "helpSource": {
+        "uri": "model/helpText.json",
+        "type": "JSON"
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {},
+        "sap.viz": {},
+        "sap.suite.ui.commons": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "ZV_API_EVENTBSD_O2",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": false,
+          "metadataUrlParams": {
+            "sap-value-list": "none"
+          }
+        }
+      },
+      "orderModel": {
+        "dataSource": "ZV_API_ORDERBSD_02",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": false,
+          "metadataUrlParams": {
+            "sap-value-list": "none"
+          }
+        }
+      },
+      "filterModel_A": {
+        "dataSource": "ZV_SRVACCESSUI",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "filterModel_B": {
+        "dataSource": "ZV_UI_ALLCONTROL_O2",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "eventReasonModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "dataSource": "eventReason"
+      },
+      "helpModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "dataSource": "helpSource"
+      },
+      "ZV_API_EVENTBSD_O2": {
+        "dataSource": "ZV_API_EVENTBSD_O2",
+        "preload": true,
+        "settings": {}
+      },
+      "ZV_API_ORDERBSD_02": {
+        "dataSource": "ZV_API_ORDERBSD_02",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.view",
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "RouteAllocReportingMain",
+          "pattern": ":?query:",
+          "target": [
+            "TargetAllocReportingMain"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetAllocReportingMain": {
+          "id": "AllocReportingMain",
+          "name": "AllocReportingMain"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}
