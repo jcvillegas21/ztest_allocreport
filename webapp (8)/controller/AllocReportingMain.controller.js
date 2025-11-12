@@ -40,6 +40,8 @@ sap.ui.define([
                 deletionFlag: "Active"
             }), "filterModel");
 
+          
+
             // New model for the chart data
             this.getView().setModel(new JSONModel(), "chartModel");
              // *** 1. ADD NEW MODEL FOR THE BAR CHART ***
@@ -69,13 +71,34 @@ sap.ui.define([
           // This array will hold the binding contexts of all selected rows
             this._aSelectedEventContexts = [];
 
+           
+
 
         },
          onBeforeRendering : function(){
-                this._customVariant = new customVariant(this.createId("customVariant"),{persistencyKey:"commanKey"});
+                  this._customVariant = new customVariant(this.createId("customVariant"),{persistencyKey:"commanKey"});
             },
         onAfterRendering : function(){
 
+             //Add filterbar
+                this._oMyFragment = sap.ui.xmlfragment("com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.fragment.CustomFilterBar",this);
+             //get selected tab
+            //  var bIsOrderBasedTab = this.getView().getModel("viewModel").getProperty("/isOrderBasedTab");
+             var tabBar = this.getView().byId("AllocReporticonTabBar");
+             var skey = tabBar.getSelectedKey();
+              var tabBarItems = tabBar.getItems();
+              var tabfilterbar = tabBarItems[0];
+           
+             //get fragment
+             if(skey=="Event")
+             {
+              
+                this.getView().addDependent(this._oMyFragment);
+               tabfilterbar.insertContent(this._oMyFragment,0);
+              
+             }
+           
+           
 
             // Link the SmartVariantManagement control to your custom control
             var oPersInfoFilter = new PersonalizableInfo({
@@ -141,7 +164,7 @@ sap.ui.define([
                 this._updateDonutChartData();
                 this._updateBarChartData();
             });
-                this.onSearch();
+                // this.onSearch();
             // Trigger the initial data load for the event-based table
           //  oEventSmartTable.rebindTable();
             // *** MODIFICATION END ***
@@ -220,6 +243,8 @@ sap.ui.define([
             and: true
         }));
 
+     
+
         if (oFilterData.allocUom) {
             if(!oBindingParams.parameters.custom) {
                 oBindingParams.parameters.custom = {};
@@ -282,18 +307,18 @@ sap.ui.define([
 
             }
          
-           if (oState.eventTablePerso) {
-            this.setVariantPersOnTable(oState.eventTablePerso, 'AllocReporteventBasedTable');
-            //     this.f.setPersData(oState.eventTablePerso).done(() => {
-            //         this._oTPCEvent.refresh();
-            //    });
-            }
-            if (oState.orderTablePerso) {
-                // this._oPersoServiceOrder.setPersData(oState.orderTablePerso).done(() => {
-                //     this._oTPCOrder.refresh();
-                // });
-               this.setVariantPersOnTable(oState.orderTablePerso, 'AllocReportorderBasedTable');
-            }
+        //    if (oState.eventTablePerso) {
+        //     this.setVariantPersOnTable(oState.eventTablePerso, 'AllocReporteventBasedTable');
+        //     //     this.f.setPersData(oState.eventTablePerso).done(() => {
+        //     //         this._oTPCEvent.refresh();
+        //     //    });
+        //     }
+        //     if (oState.orderTablePerso) {
+        //         // this._oPersoServiceOrder.setPersData(oState.orderTablePerso).done(() => {
+        //         //     this._oTPCOrder.refresh();
+        //         // });
+        //        this.setVariantPersOnTable(oState.orderTablePerso, 'AllocReportorderBasedTable');
+        //     }
         
 
 
@@ -551,7 +576,66 @@ sap.ui.define([
             // }
              const sSelectedKey = oEvent.getParameter("key");
              this.getView().getModel("viewModel").setProperty("/isOrderBasedTab", sSelectedKey === "Order");
-        
+
+            //  if (oEvent.getParameters().previousKey===oEvent.getParameters().selectedKey)
+            //  {
+            //     oEvent.bCancelBubble=true;
+            //  }
+            //  else{
+                            //Add filterbar
+                var content;
+            //  this._oMyFragment = sap.ui.xmlfragment("com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.fragment.CustomFilterBar",this);
+                //get selected tab
+                //  var bIsOrderBasedTab = this.getView().getModel("viewModel").getProperty("/isOrderBasedTab");
+                var tabBar = this.getView().byId("AllocReporticonTabBar");
+               
+                // var skey = tabBar.getSelectedKey();
+                var tabBarItems = tabBar.getItems();
+                var tabfilterbar_event = tabBarItems[0];
+                    var tabfilterbar_order = tabBarItems[1];//get order tabfilterbar
+                //get fragment
+                if(sSelectedKey === "Order")
+                {
+                  
+                    //first remove existing fragment from first tab
+                    if(tabfilterbar_order.getContent().length!==2){
+                        tabfilterbar_event.removeContent(0);
+
+                
+                
+                    if (this._oMyFragment) { // Assuming _oMyFragment holds a reference to your fragment
+                            this._oMyFragment.destroy();
+                            this._oMyFragment = null; // Clear the reference
+                           
+                    }
+                  
+                this._oMyFragment = sap.ui.xmlfragment("com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.fragment.CustomFilterBar",this);
+                this.getView().addDependent(this._oMyFragment);
+                tabfilterbar_order.insertContent(this._oMyFragment,0);
+                    }
+                }
+                else if(sSelectedKey === "Event")
+                {
+                    //first remove existing fragment from first tab
+                    if(tabfilterbar_event.getContent().length!==2){
+                        
+                        tabfilterbar_order.removeContent(0);
+
+                    if (this._oMyFragment) { // Assuming _oMyFragment holds a reference to your fragment
+                            this._oMyFragment.destroy();
+                            this._oMyFragment = null; // Clear the reference
+                        }
+
+                      
+                
+                    this._oMyFragment = sap.ui.xmlfragment("com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.fragment.CustomFilterBar",this);
+                    this.getView().addDependent(this._oMyFragment);
+                    tabfilterbar_event.insertContent(this._oMyFragment,0);
+                    }
+                
+                }
+            // }
+           
             // if (sSelectedKey === "Chart" && !this._bChartDataLoaded) {
             //     this._updateDonutChartData();
             //     this._updateBarChartData();
@@ -753,7 +837,7 @@ sap.ui.define([
                 }
             });
 
-            this.byId("AllocReportcharacteristicsSelectionInput").setTokens(aTokens);
+          sap.ui.getCore().byId("AllocReportcharacteristicsSelectionInput").setTokens(aTokens);
         },
 
         onCharacteristicsDialogCancel: function() {
