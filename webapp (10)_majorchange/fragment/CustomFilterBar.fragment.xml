@@ -1,0 +1,177 @@
+  <core:FragmentDefinition xmlns:form="sap.ui.layout.form" 
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:comp="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+    xmlns:t.rowmodes="sap.ui.table.rowmodes"
+    xmlns:uxap="sap.uxap"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"   
+   
+    
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:suite="sap.suite.ui.commons" >
+   
+            <!-- <smartVariantManagement:SmartVariantManagement id="AllocReportid_allocrpt_svm"  persistencyKey="PageVariantPKey" showExecuteOnSelection="true"/> -->
+                <comp:FilterBar id="AllocReportfilterbar" filterBarExpanded="true" useToolbar="false" persistencyKey="myPersKey" search="onSearch" clear="onClear" showClearOnFB="true">
+                   
+                    <comp:filterGroupItems>
+            <!--Search-->
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem_svm" groupName="__$INTERNAL$" name="svm" visibleInFilterBar="true" label="View">
+                             <comp:control>
+                                 <smartVariantManagement:SmartVariantManagement id="AllocReportid_allocrpt_svm"  persistencyKey="PageVariantPKey" showExecuteOnSelection="true"/>
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+                
+           
+                        <!--Search-->
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem_search" groupName="__$INTERNAL$" name="Search" visibleInFilterBar="true" label="Search">
+                             <comp:control>
+                                <SearchField id="AllocReportglobalSearchField" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/>
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+ <!--Sales Document-->    
+                    <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem_SalesDoc" 
+                            groupName="__$INTERNAL$" 
+                            name="SalesDocument" 
+                            label="Sales Document" 
+                            visibleInFilterBar="true"
+                            visible="{viewModel>/isOrderBasedTab}">
+                        <comp:control>
+                            <MultiInput id="AllocReportSalesDocInput"
+                                value="{filterModel>/salesDocument}"
+                                placeholder="Search Sales Doc"
+                                showValueHelp="true"
+                                valueHelpRequest="onValueHelpRequest"
+                                change="onFilterChanged">
+                                
+                                <customData>
+                                    <core:CustomData key="modelName" value="orderModel" />     
+                                    <core:CustomData key="collectionPath" value="ZV_CE_ORDER" />  
+                                    <core:CustomData key="key" value="PAllocAssignedOrder" />
+                                    <core:CustomData key="description" value="Vbeln" />
+                                </customData>
+
+                            </MultiInput>
+                        </comp:control>
+                    </comp:FilterGroupItem>
+<!--Characteristic Selection-->
+                       <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem" groupName="__$INTERNAL$" name="Characteristics" label="Characteristics Selection" visibleInFilterBar="true">
+                             <comp:control>
+                                 <MultiInput id="AllocReportcharacteristicsSelectionInput" showValueHelp="true" valueHelpRequest="onCharacteristicsValueHelp" editable="true"  />
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+                    <!--Time Bucket Type--> 
+                    <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem2" groupName="__$INTERNAL$" name="TimeBucketType" label="Time Bucket Type" visibleInFilterBar="true"
+                visible="{= !${viewModel>/isOrderBasedTab} }">
+                             <comp:control>
+                                 <!-- <MultiInput id="AllocReporttimeBucketTypeInput" showValueHelp="false" valueHelpRequest="onTimeBucketTypeVH" editable="true" /> -->
+                                <ComboBox id="AllocReporttimeBucketTypeInput" value="{filterModel>/timeBucketType}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem1" key="Month" text="Month" />
+                                        <core:Item id="AllocReport_IDGenItem2" key="Week" text="Week" />
+                                    </items>
+                                </ComboBox> 
+                             </comp:control>
+                        </comp:FilterGroupItem>    
+
+             <!--Allocation Sequence-->            
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem3" groupName="__$INTERNAL$" name="AllocationSequence" label="PAL Sequence" visibleInFilterBar="true">
+                             <comp:control>
+                                 <!-- <MultiInput id="AllocReportallocationSequenceInput" showValueHelp="false" valueHelpRequest="onAllocationSequenceVH" editable="true" /> -->
+                                <ComboBox id="AllocReportallocationSequenceInput" selectedKey="{filterModel>/allocSeq}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem3" key="ZPASWMS" text="ZPASWMS" />
+                                        <core:Item id="AllocReport_IDGenItem4" key="ZPASWMM" text="ZPASWMM" />
+                                        <core:Item id="AllocReport_IDGenItem5" key="ZPASMMS" text="ZPASMMS" />
+                                        <core:Item id="AllocReport_IDGenItem6" key="ZPASMMM" text="ZPASMMM" />
+                                        <core:Item id="AllocReport_IDGenItem7" key="ZPASWES" text="ZPASWES" />
+                                        <core:Item id="AllocReport_IDGenItem8" key="ZPASMMM" text="ZPASMMM" />
+                                        <core:Item id="AllocReport_IDGenItem9" key="ZPASWEM" text="ZPASWEM" />
+                                        <core:Item id="AllocReport_IDGenItem10" key="ZPASMEM" text="ZPASMEM" />
+                                    </items>
+                                </ComboBox>    
+                            </comp:control>
+                        </comp:FilterGroupItem>
+            <!--Event Reason-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem4" groupName="__$INTERNAL$" name="EventReason" label="Event Reason" visibleInFilterBar="true"
+                          visible="{= !${viewModel>/isOrderBasedTab} }">
+                             <comp:control>
+                                 
+                            <ComboBox 
+                                id="AllocReporteventReasonInput"
+                                value="{filterModel>/eventReason}"
+                                width="350px"
+                                placeholder="Search by reason or description..."
+                                showSecondaryValues="true"
+                                filterSecondaryValues="true"
+                                items="{
+                                        path: 'eventReasonModel>/EventReasons',
+                                        sorter: { path: 'text'}}"
+                                change="onFilterChanged" >
+                                <!-- DEFINE a template for each item -->
+                                <core:ListItem id="AllocReport_IDGenListItem" key="{eventReasonModel>key}" text="{eventReasonModel>text}" additionalText="{eventReasonModel>key}"/>
+                            </ComboBox>
+                            </comp:control>
+                        </comp:FilterGroupItem>
+            <!--Allocation UoM-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem5" groupName="__$INTERNAL$" name="AllocationUoM" label="Alloc UoM" visibleInFilterBar="true">
+                             <comp:control>
+                                  <!-- <MultiInput id="AllocReportallocationUoMInput" showValueHelp="false" valueHelpRequest="onAllocationUoMVH" editable="true" /> -->
+                                <!-- <ComboBox id="AllocReportallocationUoMInput" selectedKey="{filterModel>/allocUom}"
+                                    change="onFilterChanged">
+                                    <items>
+                                        <core:Item id="AllocReport_IDGenItem11" key="CS" text="CS" />
+                                        <core:Item id="AllocReport_IDGenItem12" key="IT" text="IT" />
+                                    </items>
+                                </ComboBox>  -->
+                                <Input id="AllocReportallocationUoMInput"
+                                    value="{filterModel>/allocUom}"
+                                    showValueHelp="true"
+                                    valueHelpRequest="onUomValueHelp"
+                                    change="onFilterChanged"/>
+                             </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Deletion Flag-->           
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItemDelFlag" groupName="__$INTERNAL$" name="DeletionFlag" label="Deletion Flag" visibleInFilterBar="true">
+                             <comp:control>
+                                 <ComboBox id="AllocReportdeletionFlagSelect" selectedKey="{filterModel>/deletionFlag}" change="onFilterChanged">
+                                     <items>
+                                         <core:Item id="AllocReport_IDGenItemActive" key="Active" text="Active Records" />
+                                         <core:Item id="AllocReport_IDGenItemDeleted" key="Deleted" text="Deleted Records" />
+                                         <core:Item id="AllocReport_IDGenItemAll" key="All" text="All Records" />
+                                     </items>
+                                 </ComboBox>
+                             </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Event Validity Date-->
+                         <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem6" groupName="__$INTERNAL$" name="EventValidityRange" label="Event Validity Range" visibleInFilterBar="true">
+                             <comp:control>
+                                <DateRangeSelection id="AllocReporteventValidityRangeInput"   
+                                dateValue="{filterModel>/eventValidity/from}"
+                                secondDateValue="{filterModel>/eventValidity/to}"
+                                change="onFilterChanged"/>
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+             <!--Event Time Bucket Period-->
+                        <comp:FilterGroupItem id="AllocReport_IDGenFilterGroupItem7" groupName="__$INTERNAL$" name="CVCTimeBucketPeriod" label="CVC Time Bucket Period" visibleInFilterBar="true">
+                             <comp:control>
+                                <!-- <MultiInput id="AllocReportcvcTimeBucketPeriodInput" showValueHelp="true" valueHelpRequest="onCVCTimeBucketPeriodVH" editable="true" /> -->
+                                <DateRangeSelection id="AllocReportcvcTimeBucketPeriodInput" 
+                                dateValue="{filterModel>/cvcTimeBucket/from}"
+                                secondDateValue="{filterModel>/cvcTimeBucket/to}"
+                                change="onFilterChanged" />
+                                     </comp:control>
+                        </comp:FilterGroupItem>
+                     </comp:filterGroupItems>
+                </comp:FilterBar>  
+                	
+                </core:FragmentDefinition>
