@@ -1,0 +1,61 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.comp.valuehelpdialog"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:fb="sap.ui.comp.filterbar">
+    
+    <ValueHelpDialog id="_IDGenValueHelpDialog"
+        title="{dialogModel>/title}"
+        supportRanges="false"
+        supportRangesOnly="false"
+        key="{dialogModel>/key}"
+        descriptionKey="{dialogModel>/description}"
+        ok=".onValueHelpOk"
+        cancel=".onValueHelpCancel"
+        afterClose=".onValueHelpAfterClose">
+
+        <!-- <filterBar>
+            <fb:FilterBar id="vhFilterBar" advancedMode="true" search=".onValueHelpFilterBarSearch" isRunningInValueHelpDialog="true" >
+                 <fb:dependents>
+                    <m:SearchField id="vhSearchField" showSearchButton="false" placeholder="Search..." search=".onValueHelpFilterBarSearch" width="100%"/>
+                </fb:dependents> 
+
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem1" groupName="__$INTERNAL$" visibleInFilterBar="false" name="DummyFilter" label="Dummy">
+                        <fb:control>
+                            <core:Control id="_IDGenControl" visible="false"/>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+                
+            </fb:FilterBar>
+        </filterBar> -->
+
+        		<!-- <filterBar>
+			<fb:FilterBar id="_IDGenFilterBar1" advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
+				<fb:filterGroupItems>
+					<fb:FilterGroupItem id="_IDGenFilterGroupItem"
+						groupName="__$INTERNAL$"
+						name="ProductCode"
+						label="Product Code"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input id="_IDGenInput" name="ProductCode" />
+						</fb:control>
+					</fb:FilterGroupItem>
+					<fb:FilterGroupItem id="_IDGenFilterGroupItem1"
+						groupName="__$INTERNAL$"
+						name="ProductName"
+						label="Product Name"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input id="_IDGenInput1" name="ProductName" />
+						</fb:control>
+					</fb:FilterGroupItem>
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar> -->
+
+    </ValueHelpDialog>
+
+</core:FragmentDefinition>

@@ -1,0 +1,79 @@
+/* Enter your custom styles here */
+/* Full-height chain to let tables auto-fill */
+html, body, .sapUiView, .sapUiComponentContainer {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+/* Scope to your page by ID or a custom class */
+#page,
+#mainFlexBox,
+#iconTabBar {
+  height: 100% !important;
+  width: 100%;
+}
+
+/* Let IconTabBar content pass height to inner layouts */
+#iconTabBar .sapMITBContent {
+  height: 100%;
+}
+
+.helpBtn {
+    .sapMBtnInner{
+        border-color: #ffee9e !important;
+        background-color: #ffee9e !important;
+    }
+     .sapMBtnContent{
+        color: #b44f00;
+    }
+    .sapMBtnIcon{
+        color: #b44f00 !important;
+    }
+}
+.allocMgmtBtn{
+  .sapMBtnInner{
+        border-color: #a1e7c4 !important;
+        background-color: #a1e7c4 !important;
+  } 
+    .sapMBtnContent{
+        color: #355344;
+    }
+    .sapMBtnIcon{
+        color: #355344 !important;
+    }
+}    
+.allocOverviewBtn{
+  .sapMBtnInner{
+        border-color: #f5dde1 !important;
+        background-color: #f5dde1 !important;
+  } 
+    .sapMBtnContent{
+        color: #611111;
+    }
+    .sapMBtnIcon{
+        color: #611111 !important;
+    }
+} 
+.modifyBtn {
+    .sapMBtnInner{
+        border-color: #b4cdf1 !important;
+        background-color:#b4cdf1!important;
+    }
+
+    .sapMBtnContent{
+        color: #0a62e7;
+    }
+    
+    .sapMBtnIcon{
+        color: #0a62e7 !important;
+    }
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,498 @@
+<mvc:View controllerName="com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.controller.AllocReportingMain"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:comp="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+    xmlns:t.rowmodes="sap.ui.table.rowmodes"
+    xmlns:uxap="sap.uxap"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"   
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:suite="sap.suite.ui.commons"
+    height="100%" 
+    
+    >
+     <f:DynamicPage id="AllocReport_IDGenDynamicPage" class="sapUiNoContentPadding" stickySubheaderProvider="AllocReporticonTabBar"> 
+        <!-- <f:title>
+            <f:DynamicPageTitle id="AllocReport_IDGenDynamicPageTitle" >
+                <f:heading>
+                </f:heading>
+               <smartVariantManagement:SmartVariantManagement id="AllocReportid_allocrpt_svm" persistencyKey="PageVariantPKey" showExecuteOnSelection="true"/>
+                    <SearchField id="AllocReportglobalSearchField" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/> 
+                    <ToolbarSpacer id="AllocReport_IDGenToolbarSpacer2" /> 
+               </f:actions> 
+               
+            </f:DynamicPageTitle> 
+        </f:title> 
+        <f:header>
+            <f:DynamicPageHeader id="AllocReport_IDGenDynamicPageHeader" pinnable="false">
+                  <SearchField id="AllocReportglobalSearchField" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/>
+                   <smartVariantManagement:SmartVariantManagement id="AllocReportid_allocrpt_svm" persistencyKey="PageVariantPKey" showExecuteOnSelection="true"/> 
+            </f:DynamicPageHeader>
+        </f:header>	 -->
+        <f:content> 
+             <IconTabBar
+                id="AllocReporticonTabBar"
+                class="sapUiNoContentPadding"
+                select="onTabSelect"      
+                stretchContentHeight="true"
+		        applyContentPadding="false"              
+                 >                          
+                   <items>
+                    <!-- TAB 1: EVENT BASED -->
+                    <IconTabFilter id="AllocReporteventBasedTab" key="Event" text="Event+CVC Dimension" >   
+                        <VBox id="_IDGenVBox"  fitContainer="true" height="100%" > 
+            
+                        <smartFilterBar:SmartFilterBar id="eventBased_smartFilterBar" beforeVariantFetch="onBeforeVariantFetch"
+					        afterVariantLoad="onAfterVariantLoad" entitySet="AllocReportEvent" persistencyKey="eventBased_SmartFilter_Explored" 
+                            
+                            enableBasicSearch="true" filterBarExpanded="true">
+                                <smartFilterBar:controlConfiguration>
+                                    <!--Search-->
+                                     <!-- <smartFilterBar:ControlConfiguration id="sfb_search"
+                                        key="Search" index="1" label="Search" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <SearchField id="AllocReportglobalSearchField_eb" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration> -->
+                                    <!--Character Selection-->
+                                    <smartFilterBar:ControlConfiguration id="sfb_cc"
+                                        key="CharacteristicsSelection" index="2" label="Characteristics Selection" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <MultiInput id="AllocReportcharacteristicsSelectionInput_eb" showValueHelp="true" valueHelpRequest="onCharacteristicsValueHelp" tokenUpdate="onCharacteristicsTokenUpdate"  editable="true"  />
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--Time Bucket-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_tb"
+                                        key="Time Bucket" index="3" label="Time Bucket Type" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <ComboBox id="AllocReporttimeBucketTypeInput_eb" value="{filterModel>/timeBucketType}"
+                                                change="onFilterChanged">
+                                                <items>
+                                                    <core:Item id="AllocReport_IDGenItem1_eb" key="Month" text="Month" />
+                                                    <core:Item id="AllocReport_IDGenItem2_eb" key="Week" text="Week" />
+                                                </items>
+                                            </ComboBox> 
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                     <!--PAL Sequence-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_ps"
+                                        key="PAL Sequence" index="4" label="PAL Sequence" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                            <ComboBox id="AllocReportallocationSequenceInput_eb" selectedKey="{filterModel>/allocSeq}"
+                                                change="onFilterChanged">
+                                                <items>
+                                                    <core:Item id="AllocReport_IDGenItem3_eb" key="ZPASWMS" text="ZPASWMS" />
+                                                    <core:Item id="AllocReport_IDGenItem4_eb" key="ZPASWMM" text="ZPASWMM" />
+                                                    <core:Item id="AllocReport_IDGenItem5_eb" key="ZPASMMS" text="ZPASMMS" />
+                                                    <core:Item id="AllocReport_IDGenItem6_eb" key="ZPASMMM" text="ZPASMMM" />
+                                                    <core:Item id="AllocReport_IDGenItem7_eb" key="ZPASWES" text="ZPASWES" />
+                                                    <core:Item id="AllocReport_IDGenItem8_eb" key="ZPASMES" text="ZPASMES" />
+                                                    <core:Item id="AllocReport_IDGenItem9_eb" key="ZPASWEM" text="ZPASWEM" />
+                                                    <core:Item id="AllocReport_IDGenItem10_eb" key="ZPASMEM" text="ZPASMEM" />
+                                                </items>
+                                            </ComboBox>    
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                     <!--Event Reason-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_er"
+                                        key="Event Reason" index="5" label="Event Reason" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <ComboBox  id="AllocReporteventReasonInput_eb" value="{filterModel>/eventReason}" width="350px"  placeholder="Search by reason or description..."
+                                                showSecondaryValues="true" filterSecondaryValues="true"
+                                                items="{
+                                                        path: 'eventReasonModel>/EventReasons',
+                                                        sorter: { path: 'text'}}"
+                                                change="onFilterChanged" >
+                                               
+                                                <core:ListItem id="AllocReport_IDGenListItem_eb" key="{eventReasonModel>key}" text="{eventReasonModel>text}" additionalText="{eventReasonModel>key}"/>
+                                            </ComboBox>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                     <!--Alloc Uom-->
+                                    <!-- <smartFilterBar:ControlConfiguration id="duom_IDGenControlConfiguration1"
+                                        key="Display_uom" visibleInAdvancedArea="true" hasValueHelpDialog="true" >
+                                    </smartFilterBar:ControlConfiguration> -->
+                                     <!-- <smartFilterBar:ControlConfiguration id="sfb_auom"
+                                        key="Allocation UoM" index="6" label="Allocation UoM" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                              <Input id="AllocReportallocationUoMInput_eb"
+                                                value="{filterModel>/allocUom}"
+                                                showValueHelp="true"
+                                                valueHelpRequest="onUomValueHelp"
+                                                change="onFilterChanged"/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration> -->
+                                     <!--Deletion Flag-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_delf"
+                                        key="Deletion Flag" index="7" label="Deletion Flag" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                            <ComboBox id="AllocReportdeletionFlagSelect_eb" selectedKey="{filterModel>/deletionFlag}" change="onFilterChanged">
+                                                <items>
+                                                    <core:Item id="AllocReport_IDGenItemActive_eb" key="Active" text="Active Records" />
+                                                    <core:Item id="AllocReport_IDGenItemDeleted_eb" key="Deleted" text="Deleted Records" />
+                                                    <core:Item id="AllocReport_IDGenItemAll_eb" key="All" text="All Records" />
+                                                </items>
+                                            </ComboBox>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--Event Validity Range-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_evd"
+                                        key="Event Validity Range" index="8" label="Event Validity Range" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                              <DateRangeSelection id="AllocReporteventValidityRangeInput_eb"   
+                                                dateValue="{filterModel>/eventValidity/from}"
+                                                secondDateValue="{filterModel>/eventValidity/to}"
+                                                change="onFilterChanged"/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--CVC Time Bucket Period-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_etbp"
+                                        key="CVC Time Bucket Period" index="9" label="CVC Time Bucket Period" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                               <DateRangeSelection id="AllocReportcvcTimeBucketPeriodInput_eb" 
+                                                dateValue="{filterModel>/cvcTimeBucket/from}"
+                                                secondDateValue="{filterModel>/cvcTimeBucket/to}"
+                                                change="onFilterChanged" />
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+
+                                    <!-- <smartFilterBar:ControlConfiguration id="MaterialName_IDGenControlConfiguration1"
+                                        key="MaterialName" visibleInAdvancedArea="true" hasValueHelpDialog="true" >
+                                    </smartFilterBar:ControlConfiguration> -->
+                                    <!--Hide all unwanted fields here-->
+                                    <!-- <smartFilterBar:ControlConfiguration id="Matnr_IDGenControlConfiguration1"
+                                        key="Matnr" visibleInAdvancedArea="false" hasValueHelpDialog="true" visible="false" >
+                                    </smartFilterBar:ControlConfiguration> -->
+                                    
+                                </smartFilterBar:controlConfiguration> 
+					
+                        <smartFilterBar:layoutData>
+                                    <FlexItemData id="_IDGenFlexItemData2_eb" shrinkFactor="0"/>
+                                </smartFilterBar:layoutData>
+                        </smartFilterBar:SmartFilterBar>  
+                        <!-- <core:Fragment fragmentName="com.pg.s4.zaatpallocrpt.fiorizaatpallocrpt.fragment.CustomFilterBar" type="XML" />            -->
+
+        <!-- EVENT TABLE-->                
+                        <smartTable:SmartTable id="eventBased_idSmartTable" tableType="Table" fitContainer="true" exportType="GW" enableExport="true" useVariantManagement="true" smartFilterId="eventBased_smartFilterBar"
+                        useTablePersonalisation="true" header="Event+CVC Dimension" showRowCount="true" persistencyKey="eventBased_SmartTableAnalytical_Explored"
+                        enableAutoBinding="false"  enableAutoColumnWidth="true" showTablePersonalisation="true" 
+                        entitySet="AllocReportEvent" editTogglable="false" width="100%"  customizeConfig="{'autoColumnWidth': {'*': {'min': 1, 'max': 10, 'gap': 1, 'truncateLabel': false}}}"
+                        initiallyVisibleFields="Matnr,Display_uom,MaterialName,Ean,Plant,Vkorg,Vtweg,Market,Zzcustgrp,Zzcustgrpdesc,Kunnr,CustomerName,StartDate,EndDate,Pap,BckConsum,Correl,EvtOwner,EventId,EvntComment,DelFlag,ChangeLog,BckCnsptnVal,Meins,ProductHierarchy,ProductCategory,Brand,TimeBucketType,TimeBucketPeriod,ProductAllocationQuantity,ProdAllocAssignedQuantity,ProdAllocAvailableQuantity,Cut_qty,ProdAllocPeriodLoadInPercent,ProdAllocAssignedQuantity_uom,ProductAllocationQuantity_uom,ProdAllocAvailableQuantity_uom,Cut_qty_uom,Base_uom,ProductAllocationQty_allocuom,ProdAllocAssignedQty_allocuom,ProdAllocAvailableQty_allocuom,cut_qty_allocuom,ProductAllocationQuantity_su,ProdAllocAssignedQuantity_su,ProdAllocAvailableQuantity_su,Cut_qty_su,SalesOrder_qty,Delivery_qty,CvcUuid,Allocuuid,ProdAllocationTimeSeriesUUID"
+                        ignoreFromPersonalisation="EventColor,QtyColor,CvcColor" beforeRebindTable="onBeforeRebindTable" initialise="onSmartTableInitialise" uiStateChange="onUIStateChange"> 
+                       
+                        <!-- <smartTable:customData>
+                            <core:CustomData key="requestAtLeastFields" value="EventColor,CvcColor,QtyColor" />
+                        </smartTable:customData> -->
+                       
+                        <smartTable:customToolbar>
+                        <OverflowToolbar id="eventBased_IDGenOverflowToolbar1">
+                        
+                            <ToolbarSpacer id="eventBased_IDGenToolbarSpacer1"/>
+                            
+                            <Button id= "AllocReportshowDetailsButton" icon="sap-icon://detail-view" text="Show Order Details" type="Emphasized" enabled="false" press=".onShowDetailsPress" />
+                            <Button id="AllocReport_IDGenButton1" icon="sap-icon://edit" tooltip="Manage CVC" press="manageCVCButton" text="Manage CVC" class="modifyBtn"/>
+                            <!-- <Button id="_IDGenButton8" enabled="false" text="Manage CVC" press="manageCVCButton" icon="sap-icon://edit" class="modifyBtn" tooltip="Manage CVC"/>	 -->
+                            <Button id= "goToChartButton" 
+                                class ="allocOverviewBtn"
+                                 text="Allocation Overview" 
+                                 type="Transparent" 
+                                 icon="sap-icon://bar-chart"
+                                 visible="{viewModel>/isChartDataAvailable}" 
+                                 press=".onGoToAllocOverview" />
+
+                             <!-- <Button id="AllocReport_IDGenButton" icon="sap-icon://download" tooltip="Download" press="onDownload"/> -->
+                            
+                            <Button id="AllocReport_IDGenButton1_allocmgmt" icon="sap-icon://Chart-Tree-Map" tooltip="Allocation Management" text="Allocation Management" press="onBtnPressAllocMgmt" class="allocMgmtBtn"/>
+                            <Button id="AllocReportz_pal_cockipit_help_button" enabled="true" text="Help" press="onHelpBtnPressed" icon="sap-icon://sys-help" tooltip="Help" class="helpBtn"/>	
+                        </OverflowToolbar>
+                    </smartTable:customToolbar>
+
+               <t:Table id="AllocReporteventBasedTable" class="sapUiSmallMarginTop" selectionMode="MultiToggle" rowActionCount="1"  selectionBehavior="Row" rowSelectionChange=".onRowSelectionChange" rowMode="Auto" minAutoRowCount="1" >
+               
+                 <t:rowSettingsTemplate>
+                     <!-- <t:RowSettings id="_IDGenRowSettings" highlight="{= ${DelFlag} === 'X' ? 'Error' : 'None' }" />  -->
+                      <t:RowSettings id="_IDGenRowSettings" highlight="{path:'DelFlag', formatter:'.formatter.formatRowHighlight'}"/> 
+                </t:rowSettingsTemplate>               
+                </t:Table> 
+
+                        <smartTable:layoutData>
+                            <FlexItemData id="_IDGenFlexItemData1" growFactor="1" baseSize="0%"/>
+                        </smartTable:layoutData>
+                    </smartTable:SmartTable>
+                    </VBox>
+                    </IconTabFilter>
+
+                    <!-- TAB 2: ORDER BASED -->
+                    <IconTabFilter id="AllocReportorderBasedTab" key="Order" text="Sales Dimension" >     
+                     <VBox id="_IDGenVBox1"  fitContainer="true" height="100%" >  
+                        <smartFilterBar:SmartFilterBar id="orderBased_smartFilterBar" beforeVariantFetch="onBeforeVariantFetch"
+					        afterVariantLoad="onAfterVariantLoad" entitySet="ZV_CE_ORDER" persistencyKey="orderBased_SmartFilter_Explored" basicSearchFieldName="PAllocAssignedOrder,PAllocAssOrderItemNo,Vkorg,Vtweg,Market,Spart,Sales_Group,Sales_Office,ZZCUSTGRP,KDGRP_DESC,CUST_HIER_DESC,Created_at,Pkunag,Pkunag_desc,PKUNWE,Pkunwe_desc,Ean,Pap,StartDate,EndDate,Matnr,MaterialName,AUART,Meins_buom,KCQTY,AEMENGE,REM_PROD_ALLOC,REQQTY_HD,MENGE,PERIOD_DIS,RFMNG,HELD_QTYSU,HELD_QTYIT,CUT_REASON,DELQTY,PLUID,Allocuuid,CharcValueCombinationUUID" enableBasicSearch="false" filterBarExpanded="true">
+                                <smartFilterBar:controlConfiguration>
+                                    <!--Search-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_search_ob"
+                                        key="Search" index="1" label="Search" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <SearchField id="AllocReportglobalSearchField_ob" liveChange="onGlobalSearch" width="20%" placeholder="Search..."/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                     <!--Sales Document-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_sd_ob"
+                                        key="Sales Document" index="2" label="Sales Document" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <MultiInput id="AllocReportSalesDocInput_ob"
+                                                    value="{filterModel>/salesDocument}"
+                                                    placeholder="Search Sales Doc"
+                                                    showValueHelp="true"
+                                                    valueHelpRequest="onValueHelpRequest"
+                                                    change="onFilterChanged">
+                                
+                                                    <customData>
+                                                         <core:CustomData key="fieldName" value="PAllocAssignedOrder" />
+                                                        <core:CustomData key="modelName" value="filterModel_C" />     
+                                                        <core:CustomData key="collectionPath" value="/ZV_B_PRODALLOCASSIGNEDORDER_VH" />  
+                                                        <core:CustomData key="title" value="Sales Document" />
+                                                        <core:CustomData key="key" value="PAllocAssignedOrder" />
+                                                        <core:CustomData key="label" value="Sales Document" />                          
+                                                        <!-- <core:CustomData key="description" value="description" /> -->
+                                                    </customData>
+
+                                                </MultiInput>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--Character Selection-->
+                                    <smartFilterBar:ControlConfiguration id="sfb_cc_ob"
+                                        key="CharacteristicsSelection" index="2" label="Characteristics Selection" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                             <MultiInput id="AllocReportcharacteristicsSelectionInput_ob" showValueHelp="true" valueHelpRequest="onCharacteristicsValueHelp" tokenUpdate="onCharacteristicsTokenUpdate" editable="true"  />
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                   
+                                   
+                                     <!--PAL Sequence-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_ps_ob"
+                                        key="PAL Sequence" index="4" label="PAL Sequence" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                            <ComboBox id="AllocReportallocationSequenceInput_ob" selectedKey="{filterModel>/allocSeq}"
+                                                change="onFilterChanged">
+                                                <items>
+                                                    <core:Item id="AllocReport_IDGenItem3_ob" key="ZPASWMS" text="ZPASWMS" />
+                                                    <core:Item id="AllocReport_IDGenItem4_ob" key="ZPASWMM" text="ZPASWMM" />
+                                                    <core:Item id="AllocReport_IDGenItem5_ob" key="ZPASMMS" text="ZPASMMS" />
+                                                    <core:Item id="AllocReport_IDGenItem6_ob" key="ZPASMMM" text="ZPASMMM" />
+                                                    <core:Item id="AllocReport_IDGenItem7_ob" key="ZPASWES" text="ZPASWES" />
+                                                    <core:Item id="AllocReport_IDGenItem8_ob" key="ZPASMES" text="ZPASMES" />
+                                                    <core:Item id="AllocReport_IDGenItem9_ob" key="ZPASWEM" text="ZPASWEM" />
+                                                    <core:Item id="AllocReport_IDGenItem10_ob" key="ZPASMEM" text="ZPASMEM" />
+                                                   
+                                                </items>
+                                            </ComboBox>    
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    
+                                     <!--Alloc Uom-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_auom_ob"
+                                        key="Allocation UoM" index="6" label="Allocation UoM" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                              <Input id="AllocReportallocationUoMInput_ob"
+                                                value="{filterModel>/allocUom}"
+                                                showValueHelp="true"
+                                                valueHelpRequest="onUomValueHelp"
+                                                change="onFilterChanged"/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                     <!--Deletion Flag-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_delf_ob"
+                                        key="Deletion Flag" index="7" label="Deletion Flag" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                            <ComboBox id="AllocReportdeletionFlagSelect_ob" selectedKey="{filterModel>/deletionFlag}" change="onFilterChanged">
+                                                <items>
+                                                    <core:Item id="AllocReport_IDGenItemActive_ob" key="Active" text="Active Records" />
+                                                    <core:Item id="AllocReport_IDGenItemDeleted_ob" key="Deleted" text="Deleted Records" />
+                                                    <core:Item id="AllocReport_IDGenItemAll_ob" key="All" text="All Records" />
+                                                </items>
+                                            </ComboBox>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--Event Validity Range-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_evd_ob"
+                                        key="Event Validity Range" index="8" label="Event Validity Range" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                              <DateRangeSelection id="AllocReporteventValidityRangeInput_ob"   
+                                                dateValue="{filterModel>/eventValidity/from}"
+                                                secondDateValue="{filterModel>/eventValidity/to}"
+                                                change="onFilterChanged"/>
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+                                    <!--CVC Time Bucket Period-->
+                                     <smartFilterBar:ControlConfiguration id="sfb_etbp_ob"
+                                        key="CVC Time Bucket Period" index="9" label="CVC Time Bucket Period" width="300px" visibleInAdvancedArea="true">
+                                        <smartFilterBar:customControl>
+                                               <DateRangeSelection id="AllocReportcvcTimeBucketPeriodInput_ob" 
+                                                dateValue="{filterModel>/cvcTimeBucket/from}"
+                                                secondDateValue="{filterModel>/cvcTimeBucket/to}"
+                                                change="onFilterChanged" />
+                                        </smartFilterBar:customControl>
+                                    </smartFilterBar:ControlConfiguration>
+
+                                    <!-- <smartFilterBar:ControlConfiguration id="MaterialName_IDGenControlConfiguration1"
+                                        key="MaterialName" visibleInAdvancedArea="true" hasValueHelpDialog="true" >
+                                    </smartFilterBar:ControlConfiguration>
+                                     <smartFilterBar:ControlConfiguration id="Matnr_IDGenControlConfiguration1"
+                                        key="Matnr" visibleInAdvancedArea="true" hasValueHelpDialog="true" >
+                                    </smartFilterBar:ControlConfiguration> -->
+                                    
+                                </smartFilterBar:controlConfiguration> 
+					
+                        <smartFilterBar:layoutData>
+                                    <FlexItemData id="_IDGenFlexItemData2" shrinkFactor="0"/>
+                                </smartFilterBar:layoutData>
+                        </smartFilterBar:SmartFilterBar>    
+                         <smartTable:SmartTable id="orderBased_idSmartTable" entitySet="ZV_CE_ORDER" tableType="Table" fitContainer="true" exportType="GW" enableExport="true" useVariantManagement="true" smartFilterId="orderBased_smartFilterBar"
+                        useTablePersonalisation="true" header="Sales Dimension" showRowCount="true" persistencyKey="orderBased_SmartTableAnalytical_Explored"
+                        enableAutoBinding="false"  enableAutoColumnWidth="true" showTablePersonalisation="true" 
+                        editTogglable="false" width="100%"  customizeConfig="{'autoColumnWidth': {'*': {'min': 1, 'max': 10, 'gap': 1, 'truncateLabel': false}}}"
+                        initiallyVisibleFields="PAllocAssignedOrder,PAllocAssOrderItemNo,Vkorg,Vtweg,Market,Spart,Sales_Group,Sales_Office,ZZCUSTGRP,KDGRP_DESC,CUST_HIER_DESC,Created_at,Pkunag,Pkunag_desc,PKUNWE,Pkunwe_desc,Ean,Pap,StartDate,EndDate,Matnr,MaterialName,AUART,Meins_buom,KCQTY,AEMENGE,REM_PROD_ALLOC,REQQTY_HD,MENGE,PERIOD_DIS,RFMNG,HELD_QTYSU,HELD_QTYIT,CUT_REASON,DELQTY,PLUID,Allocuuid,CharcValueCombinationUUID"
+                        ignoreFromPersonalisation="DELNO,field1color,DELNR,ProdAllocQuantityUnit_su,ProdAllocQuantityUnit_it,GITIME,TSTAMP,VODAT_FRM" beforeRebindTable="onBeforeRebindTable" >
+                        <smartTable:customToolbar>
+                        <OverflowToolbar id="OB_IDGenOverflowToolbar1">
+                        
+                            <ToolbarSpacer id="OB_IDGenToolbarSpacer1"/>
+                            
+                        </OverflowToolbar>
+                    </smartTable:customToolbar>
+
+                <t:Table id="AllocReportorderBasedTable" class="sapUiSmallMarginTop" selectionMode="None" rowActionCount="1"  selectionBehavior="Row" rowMode="Auto" >
+               
+                   
+                    <!-- <t:columns> -->
+                        <!-- <t:Column id="_IDGenColumn"  >
+                            <Label id="_IDGenLabel" text="Status"></Label>
+                                <t:template>
+                                    <core:Icon id="_IDGenIcon" src="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter:'formatter.setJobStatusIcon'}"
+                                    color="{parts: ['Status','Totrecords','Totsrecords','Toterecords'], formatter: 'formatter.runJobStatusIconColor'}"/>
+                                </t:template>
+                                <t:customData>
+                                    <core:CustomData key="p13nData"	value='\{"columnKey": "Status", "leadingProperty": "Status", "autoColumnWidth": \{ "min": 1, "max": 5 }, "columnIndex": 5}' />
+                                </t:customData>
+                        </t:Column>
+
+                        <t:Column id="_IDGenColumn1"  >
+                                <Label id="_IDGenLabel2" text="Logs Link"></Label>
+                                <t:template>
+                                    <Link id="_IDGenLink" text="{path:'Loghandle', formatter:'formatter.showLogLink'}" press="onShowLogLink"/>
+                                </t:template>
+                                <t:customData>
+                                <core:CustomData key="p13nData"
+                                        value='\{"columnKey": "ShowLog", "autoColumnWidth": \{ "min": 1, "max": 3 }, "columnIndex": 11}' />
+                                </t:customData>
+                                        
+                        </t:Column> -->
+                            
+                    <!-- </t:columns> -->
+                            
+                    <!-- <t:rowActionTemplate >
+                        <t:RowAction id="_IDGenRowAction1"  >
+                            <t:RowActionItem id="_IDGenRowActionItem1"  text="{path: 'Loghandle'}" type="Navigation" visible="true" press="onRowActionItemSelect">
+                            
+                            </t:RowActionItem>
+                        </t:RowAction>
+                    </t:rowActionTemplate > -->
+
+                        </t:Table>
+                        <smartTable:layoutData>
+                            <FlexItemData id="OB_IDGenFlexItemData1" growFactor="1" baseSize="0%"/>
+                        </smartTable:layoutData>
+                    </smartTable:SmartTable>
+                    </VBox>
+                    </IconTabFilter>
+
+<!--Chart-->
+                    <IconTabFilter id="AllocReportChartTab" key="Chart"  visible="{viewModel>/isChartDataAvailable}" >
+                    <content>
+                        <l:Splitter id="chartSplitter" orientation="Horizontal" width="100%" height="100%">
+                            <l:contentAreas>
+                                <suite:ChartContainer id="donutChartContainer" autoAdjustHeight="true" showPersonalization="true" showZoom="true" wrapLabels="true" showSelectionDetails="true" showFullScreen="true"
+                                                    title="Allocation Status"  >
+                                        <suite:layoutData>
+                                            <l:SplitterLayoutData id="_IDGenSplitterLayoutData" size="20%" resizable="true"/>
+                                        </suite:layoutData>
+                                    <suite:content>
+                                        <suite:ChartContainerContent id="_IDGenChartContainerContent1" icon="sap-icon://donut-chart" title="Allocation Status" >                      
+                                            <suite:content>
+                                                <viz:VizFrame id="allocationStatusChart"
+                                                    uiConfig="{applicationSet:'fiori'}"
+                                                     vizType='donut' >
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset" data="{chartModel>/results}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition" name="Status" value="{chartModel>Status}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition" name="Count" value="{chartModel>Count}" />
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition1" name="Criticality" value="{chartModel>Criticality}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem id='sizeFeed' uid="size" type="Measure" values="Count" />
+                                                        <viz.feeds:FeedItem id='colorFeed' uid="color" type="Dimension" values="Status" />
+                                                    </viz:feeds>
+                                            </viz:VizFrame>
+                                            </suite:content>
+                                        </suite:ChartContainerContent>
+                                    </suite:content>
+                                </suite:ChartContainer>
+
+                                <suite:ChartContainer id="barChartContainer" autoAdjustHeight="true" showPersonalization="true" showZoom="true" wrapLabels="true" showSelectionDetails="true" showFullScreen="true"
+                                 title="Allocation by Product Category" >
+                                  <suite:layoutData>
+                                        <l:SplitterLayoutData id="_IDGenSplitterLayoutData1" size="80%" resizable="true"/>
+                                    </suite:layoutData>
+                                     
+                                        
+                                    
+                                    <suite:content>
+                                        <suite:ChartContainerContent id="_IDGenChartContainerContent2" icon="sap-icon://bar-chart" title="Allocation by Product Category">
+                                            <suite:content>
+                                                <viz:VizFrame id="productCategoryChart"
+                                                    uiConfig="{applicationSet:'fiori'}"
+                                                     vizType='bar' >
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset1" data="{barChartModel>/results}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition1" name="ProductCategory" value="{barChartModel>ProductCategory}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition2" name="TotalAllocation" value="{barChartModel>TotalAllocation}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem id="_IDGenFeedItem" uid="valueAxis" type="Measure" values="TotalAllocation" />
+                                                        <viz.feeds:FeedItem id="_IDGenFeedItem1" uid="categoryAxis" type="Dimension" values="ProductCategory" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </suite:content>
+                                        </suite:ChartContainerContent>
+                                    </suite:content>
+                                </suite:ChartContainer>
+
+                            </l:contentAreas>
+                        </l:Splitter>
+                    </content>
+                </IconTabFilter>
+                </items>
+              
+            </IconTabBar>
+         </f:content>
+    </f:DynamicPage> 
+</mvc:View>

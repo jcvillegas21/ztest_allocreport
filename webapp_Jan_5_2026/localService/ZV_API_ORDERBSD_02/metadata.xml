@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://zqe-400-pp:8443/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="cds_zv_srv_orderbsd" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ZV_B_EAN_VHType" sap:label="EAN Value Help" sap:value-list="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Ean"/>
+                </Key>
+                <Property Name="Ean" Type="Edm.String" Nullable="false" MaxLength="18" sap:display-format="UpperCase" sap:label="EAN/UPC" sap:quickinfo="International Article Number (EAN/UPC)"/>
+            </EntityType>
+            <EntityType Name="ZV_B_PRODALLOCASSIGNEDORDER_VHType" sap:label="Value help for Prod Alloc Assigned Order" sap:value-list="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PAllocAssignedOrder"/>
+                </Key>
+                <Property Name="PAllocAssignedOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Sales Order" sap:quickinfo="Product Allocation Assigned Order"/>
+            </EntityType>
+            <EntityType Name="ZV_CE_ORDERType" sap:label="Order Based Custom Entity" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Allocuuid"/>
+                    <PropertyRef Name="PAllocAssignedOrder"/>
+                    <PropertyRef Name="PAllocAssOrderItemNo"/>
+                </Key>
+                <Property Name="Allocuuid" Type="Edm.Guid" Nullable="false" sap:label="GUID" sap:quickinfo="GUID (RAW16)"/>
+                <Property Name="PAllocAssignedOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Sales Document" sap:quickinfo="Product Allocation Assigned Order" sap:value-list="standard"/>
+                <Property Name="PAllocAssOrderItemNo" Type="Edm.String" Nullable="false" MaxLength="6" sap:display-format="NonNegative" sap:label="Sales Document Item" sap:quickinfo="Product Allocation Assigned Order Item"/>
+                <Property Name="Vkorg" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Sales Organization"/>
+                <Property Name="Vtweg" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Distribution channel"/>
+                <Property Name="Market" Type="Edm.String" MaxLength="3" sap:label="Market"/>
+                <Property Name="Spart" Type="Edm.String" MaxLength="2" sap:label="Division"/>
+                <Property Name="Sales_Group" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Sales Group"/>
+                <Property Name="Sales_Office" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Sales Office"/>
+                <Property Name="ZZCUSTGRP" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Customer Group"/>
+                <Property Name="Created_at" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Created At"/>
+                <Property Name="Pkunag" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Sold-To Party"/>
+                <Property Name="PKUNWE" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Ship-To Party"/>
+                <Property Name="Pkunag_desc" Type="Edm.String" MaxLength="50" sap:label="Sold-To Party Desc" sap:quickinfo="Sold-To Party Description"/>
+                <Property Name="Pkunwe_desc" Type="Edm.String" MaxLength="50" sap:label="Ship-To Party Desc" sap:quickinfo="Ship-To Party Description"/>
+                <Property Name="CUST_HIER_DESC" Type="Edm.String" MaxLength="40" sap:label="Customer Hierachy De" sap:quickinfo="Customer Hierachy Description"/>
+                <Property Name="KDGRP_DESC" Type="Edm.String" MaxLength="50" sap:label="Customer group Desc" sap:quickinfo="Customer group Description"/>
+                <Property Name="Ean" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="EAN/UPC" sap:quickinfo="International Article Number (EAN/UPC)" sap:value-list="standard"/>
+                <Property Name="Pap" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Allocation Sequence" sap:quickinfo="Product Allocation Sequence"/>
+                <Property Name="StartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Event Start" sap:quickinfo="Event Start Date"/>
+                <Property Name="EndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Event End" sap:quickinfo="Event End Date"/>
+                <Property Name="Matnr" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Material" sap:quickinfo="Material Number"/>
+                <Property Name="MaterialName" Type="Edm.String" MaxLength="40" sap:label="Material Description"/>
+                <Property Name="DELNR" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="MRP element number"/>
+                <Property Name="CharcValueCombinationUUID" Type="Edm.Guid" sap:label="CVC UUID" sap:quickinfo="Characteristic Value Combination UUID"/>
+                <Property Name="AUART" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Sales Document Type"/>
+                <Property Name="GITIME" Type="Edm.DateTimeOffset" Precision="0" sap:label="Time Stamp" sap:quickinfo="UTC Time Stamp in Short Form (YYYYMMDDhhmmss)"/>
+                <Property Name="Meins" Type="Edm.String" MaxLength="3" sap:label="Sales UOM" sap:semantics="unit-of-measure"/>
+                <Property Name="Meins_buom" Type="Edm.String" MaxLength="3" sap:label="Base Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="KCQTY" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Allocation Qty"/>
+                <Property Name="AEMENGE" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Allocation Consumed Qty"/>
+                <Property Name="REM_PROD_ALLOC" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Remaining Product Allocation Quantity"/>
+                <Property Name="REQQTY_HD" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Sales Order Qty"/>
+                <Property Name="MENGE" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Confirmed Quantity"/>
+                <Property Name="RFMNG" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Cut Qty"/>
+                <Property Name="PLUID" Type="Edm.Guid" sap:label="Prod Alloc UUID" sap:quickinfo="GUID (RAW16)"/>
+                <Property Name="TSTAMP" Type="Edm.String" MaxLength="15" sap:label="TimeStamp"/>
+                <Property Name="PERIOD_DIS" Type="Edm.DateTimeOffset" Precision="0" sap:label="Time Bucket" sap:quickinfo="Product Allocation Period End UTC Date Time"/>
+                <Property Name="VODAT_FRM" Type="Edm.Time" Precision="0"/>
+                <Property Name="HELD_QTYSU" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ProdAllocQuantityUnit_su" sap:label="Cut Qty - SU"/>
+                <Property Name="HELD_QTYIT" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ProdAllocQuantityUnit_it" sap:label="Cut Qty - IT"/>
+                <Property Name="CUT_REASON" Type="Edm.String" MaxLength="30" sap:label="Cut Reason"/>
+                <Property Name="DELNO" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Delivery No" sap:quickinfo="Sales and Distribution Document Number"/>
+                <Property Name="DELQTY" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Meins_buom" sap:label="Actual Del Qty"/>
+                <Property Name="field1color" Type="Edm.Byte"/>
+                <Property Name="ProdAllocQuantityUnit_su" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Product Allocation Quantity Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="ProdAllocQuantityUnit_it" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Product Allocation Quantity Unit" sap:semantics="unit-of-measure"/>
+            </EntityType>
+            <EntityContainer Name="cds_zv_srv_orderbsd_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZV_B_EAN_VH" EntityType="cds_zv_srv_orderbsd.ZV_B_EAN_VHType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="ZV_B_PRODALLOCASSIGNEDORDER_VH" EntityType="cds_zv_srv_orderbsd.ZV_B_PRODALLOCASSIGNEDORDER_VHType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="ZV_CE_ORDER" EntityType="cds_zv_srv_orderbsd.ZV_CE_ORDERType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="cds_zv_srv_orderbsd.cds_zv_srv_orderbsd_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="cds_zv_srv_orderbsd.cds_zv_srv_orderbsd_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Org.OData.Capabilities.V1.BatchSupport">
+                    <Record Type="Org.OData.Capabilities.V1.BatchSupportType">
+                        <PropertyValue Property="ReferencesAcrossChangeSetsSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="https://zqe-400-pp:8443/sap/opu/odata/sap/ZV_API_ORDERBSD_02/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://zqe-400-pp:8443/sap/opu/odata/sap/ZV_API_ORDERBSD_02/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

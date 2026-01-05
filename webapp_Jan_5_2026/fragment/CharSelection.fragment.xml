@@ -1,0 +1,457 @@
+<core:FragmentDefinition
+xmlns="sap.m"
+xmlns:smartField="sap.ui.comp.smartfield"
+xmlns:smartMultiInput="sap.ui.comp.smartmultiinput"
+xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout">
+	<Dialog
+		id="characteristicsDialog"
+		title="Characteristics Selection"
+        contentWidth="600px"
+        contentHeight="500px"
+        resizable="true"
+        draggable="true">
+		<content>
+            <IconTabBar id="AllocReportcharIncludeExcludeTabs" class="sapUiResponsiveContentPadding" expanded="{device>/isNoPhone}">
+				<items>
+					<IconTabFilter id="iconTabFilter1" key="include" text="Include">
+                        <!-- Event Based Fields (Visible when Event tab is active) -->
+                        <f:SimpleForm id="eventBasedIncludeForm" editable="true" layout="ResponsiveGridLayout" visible="{= !${viewModel>/isOrderBasedTab} }">
+                            <Label id="_IDGenLabel77" text="Sales Organization"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventVkorgInput" value="{Vkorg}" entitySet="AllocReportEvent" tokenUpdate="getSMIValue" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vkorg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="AllocReport_IDGenLabel78" text="Distribution Channel"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventVtwegInput" value="{Vtweg}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vtweg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel81" text="Material"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventMatnrInput"  value="{Matnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Matnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel79" text="Market"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventMarketInput"  value="{Market}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Market"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel57" text="EAN"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventEANInput"  value="{Ean}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Ean"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel65" text="Customer Hierarchy"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventCustHierarchyInput"  value="{Kunnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Kunnr"/>
+                                </smartMultiInput:customData>
+                                </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel94" text="Customer Group"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeEventCustGroupInput"  value="{Zzcustgrp}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Zzcustgrp"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                        </f:SimpleForm>
+
+                        <!-- Order Based Fields (Visible when Order tab is active) -->
+                        <f:SimpleForm id="orderBasedIncludeForm" editable="true" layout="ResponsiveGridLayout" visible="{viewModel>/isOrderBasedTab}">                    
+                            <Label id="_IDGenLabel82" text="Sales Organization"/>
+                            <!-- <MultiInput id="AllocReportincludeOrderVkorgInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vkorg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_SalesOrganization" />
+                                    <core:CustomData key="title" value="Select Sales Org" />
+                                    <core:CustomData key="key" value="SalesOrganization" />
+                                    <core:CustomData key="description" value="SalesOrganization_Text" />
+                                </customData>
+                            </MultiInput> -->
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderVkorgInput" value="{Vkorg}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vkorg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel83" text="Distribution Channel"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderVtwegInput" value="{Vtweg}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vtweg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportincludeOrderVtwegInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vtweg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_DistributionChannel" />
+                                    <core:CustomData key="title" value="Select Distribution Channel" />
+                                    <core:CustomData key="key" value="DistributionChannel" />
+                                    <core:CustomData key="description" value="DistributionChannel_Text" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel85" text="Material"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderMatnrInput" value="{Matnr}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Matnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportincludeOrderMatnrInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Matnr" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_PROD_NUM_VH" />
+                                    <core:CustomData key="title" value="Select Material" />
+                                    <core:CustomData key="key" value="Material" />
+                                    <core:CustomData key="description" value="Description" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel84" text="Market"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderMarketInput" value="{Market}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Market"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportincludeOrderMarketInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Market" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_MAKT_VH" />
+                                    <core:CustomData key="title" value="Select Market" />
+                                    <core:CustomData key="key" value="zzmakt" />
+                                    <core:CustomData key="description" value="description" />
+                                </customData> 
+                             </MultiInput> -->
+                              <Label id="_IDGenLabel95" text="EAN"/>
+                              <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderEANInput"  value="{Ean}" entitySet="AllocReportEvent">
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Ean"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportincludeOrderEANInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="EAN" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_EAN_VH" />
+                                    <core:CustomData key="title" value="Select EAN" />
+                                    <core:CustomData key="key" value="ean" />
+                                    
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel96" text="Customer Hierarchy"/>
+                              <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderCustHierarchyInput"  value="{Kunnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Kunnr"/>
+                                </smartMultiInput:customData>
+                                </smartMultiInput:SmartMultiInput>
+
+                             <!-- <MultiInput id="AllocReportincludeOrderCustHierarchyInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Kunnr" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_Customer_VH" />
+                                    <core:CustomData key="title" value="Select Customer Hierarchy" />
+                                    <core:CustomData key="key" value="Customer" />
+                                    <core:CustomData key="description" value="CustomerName" />
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel97" text="Customer Group"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportincludeOrderCustGroupInput"  value="{Zzcustgrp}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Zzcustgrp"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="includeOrderCustGroupInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Zzcustgrp" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/ZV_C_CUSTOMGROUP" />
+                                    <core:CustomData key="title" value="Select Customer Group" />
+                                    <core:CustomData key="key" value="Kunnr" />
+                                    
+                                </customData> 
+                             </MultiInput> -->
+                            
+                        </f:SimpleForm>
+                    </IconTabFilter>
+
+                    <!--Exclude Tab-->
+                    <!--Event-Based Exclude-->
+                    <IconTabFilter id="iconTabFilter2" key="exclude" text="Exclude">
+                        <f:SimpleForm id="eventBasedExcludeForm" editable="true" layout="ResponsiveGridLayout" visible="{= !${viewModel>/isOrderBasedTab} }">
+                            <Label id="_IDGenLabel72" text="Sales Organization"/>
+                            <!-- <MultiInput id="AllocReportexcludeEventVkorgInput" valueHelpRequest="onValueHelpRequest"  showSuggestion="true">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vkorg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_SalesOrganization" />
+                                    <core:CustomData key="title" value="Select Sales Org" />
+                                    <core:CustomData key="key" value="SalesOrganization" />
+                                    <core:CustomData key="description" value="SalesOrganization_Text" />
+                                </customData>
+                            </MultiInput> -->
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventVkorgInput" value="{Vkorg}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vkorg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <Label id="_IDGenLabel73" text="Distribution Channel"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventVtwegInput" value="{Vtweg}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vtweg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeEventVtwegInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vtweg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_DistributionChannel" />
+                                    <core:CustomData key="title" value="Select Distribution Channel" />
+                                    <core:CustomData key="key" value="DistributionChannel" />
+                                    <core:CustomData key="description" value="DistributionChannel_Text" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel75" text="Material"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventMatnrInput" value="{Matnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Matnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeEventMatnrInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Matnr" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_PROD_NUM_VH" />
+                                    <core:CustomData key="title" value="Select Material" />
+                                    <core:CustomData key="key" value="Material" />
+                                    <core:CustomData key="description" value="Description" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel74" text="Market"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventMarketInput" value="{Market}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Market"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeEventMarketInput" valueHelpRequest="onValueHelpRequest"  >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Market" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_MAKT_VH" />
+                                    <core:CustomData key="title" value="Select Market" />
+                                    <core:CustomData key="key" value="zzmakt" />
+                                    <core:CustomData key="description" value="description" />
+                                </customData> 
+                             </MultiInput> -->
+                              <Label id="_IDGenLabel98" text="EAN"/>
+                               <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventEANInput" value="{Ean}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Ean"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeEventEANInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="EAN" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_EAN_VH" />
+                                    <core:CustomData key="title" value="Select EAN" />
+                                    <core:CustomData key="key" value="ean" />
+                                    
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel99" text="Customer Hierarchy"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventKunnrInput" value="{Kunnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Kunnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeEventCustHierarchyInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Kunnr" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_Customer_VH" />
+                                    <core:CustomData key="title" value="Select Customer Hierarchy" />
+                                    <core:CustomData key="key" value="Customer" />
+                                    <core:CustomData key="description" value="CustomerName" />
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel100" text="Customer Group"/>
+                              <smartMultiInput:SmartMultiInput id="AllocReportexcludeEventCustGroupInput" value="{Zzcustgrp}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Zzcustgrp"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeEventCustGroupInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Zzcustgrp" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/ZV_C_CUSTOMGROUP" />
+                                    <core:CustomData key="title" value="Select Customer Group" />
+                                    <core:CustomData key="key" value="Kunnr" />
+                                   
+                                </customData> 
+                             </MultiInput> -->
+                            
+                        </f:SimpleForm>
+
+                        <!--Order-Based Exclude-->
+                        <f:SimpleForm id="orderBasedExcludeForm" editable="true" layout="ResponsiveGridLayout" visible="{viewModel>/isOrderBasedTab}">
+                            <Label id="_IDGenLabel86" text="Sales Organization"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderVkorgInput" value="{Vkorg}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vkorg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeOrderVkorgInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vkorg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_SalesOrganization" />
+                                    <core:CustomData key="title" value="Select Sales Org" />
+                                    <core:CustomData key="key" value="SalesOrganization" />
+                                    <core:CustomData key="description" value="SalesOrganization_Text" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel87" text="Distribution Channel"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderVtwegInput" value="{Vtweg}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Vtweg"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeOrderVtwegInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Vtweg" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_DistributionChannel" />
+                                    <core:CustomData key="title" value="Select Distribution Channel" />
+                                    <core:CustomData key="key" value="DistributionChannel" />
+                                    <core:CustomData key="description" value="DistributionChannel_Text" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel89" text="Material"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderMatnrInput" value="{Matnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Matnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeOrderMatnrInput" valueHelpRequest="onValueHelpRequest">
+                                <customData>
+                                    <core:CustomData key="fieldName" value="Matnr" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_PROD_NUM_VH" />
+                                    <core:CustomData key="title" value="Select Material" />
+                                    <core:CustomData key="key" value="Material" />
+                                    <core:CustomData key="description" value="Description" />
+                                </customData>
+                            </MultiInput> -->
+                            <Label id="_IDGenLabel88" text="Market"/>
+                            <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderMarketInput" value="{Market}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Market"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                            <!-- <MultiInput id="AllocReportexcludeOrderMarketInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Market" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_MAKT_VH" />
+                                    <core:CustomData key="title" value="Select Market" />
+                                    <core:CustomData key="key" value="zzmakt" />
+                                    <core:CustomData key="description" value="description" />
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel101" text="EAN"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderEANInput" value="{Ean}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Ean"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeOrderEANInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="EAN" />
+                                    <core:CustomData key="modelName" value="filterModel_B" />
+                                    <core:CustomData key="collectionPath" value="/ZV_B_EAN_VH" />
+                                    <core:CustomData key="title" value="Select EAN" />
+                                    <core:CustomData key="key" value="ean" />
+                                    
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel102" text="Customer Hierarchy"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderCustHierarchyInput" value="{Kunnr}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Kunnr"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeOrderCustHierarchyInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Kunnr" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/I_Customer_VH" />
+                                    <core:CustomData key="title" value="Select Customer Hierarchy" />
+                                    <core:CustomData key="key" value="Customer" />
+                                    <core:CustomData key="description" value="CustomerName" />
+                                </customData> 
+                             </MultiInput> -->
+                             <Label id="_IDGenLabel103" text="Customer Group"/>
+                             <smartMultiInput:SmartMultiInput id="AllocReportexcludeOrderCustGroupInput" value="{Zzcustgrp}" entitySet="AllocReportEvent" >
+                                <smartMultiInput:customData>
+                                    <!-- Add a single custom data item -->
+                                    <core:CustomData key="fieldName" value="Zzcustgrp"/>
+                                </smartMultiInput:customData>
+                            </smartMultiInput:SmartMultiInput>
+                             <!-- <MultiInput id="AllocReportexcludeOrderCustGroupInput" valueHelpRequest="onValueHelpRequest" >
+                                <customData> 
+                                    <core:CustomData key="fieldName" value="Zzcustgrp" />
+                                    <core:CustomData key="modelName" value="filterModel_A" />
+                                    <core:CustomData key="collectionPath" value="/ZV_C_CUSTOMGROUP" />
+                                    <core:CustomData key="title" value="Select Customer Group" />
+                                    <core:CustomData key="key" value="Kunnr" />
+                                    
+                                </customData> 
+                             </MultiInput> -->
+
+                        </f:SimpleForm>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+		</content>
+        <buttons>
+            <Button id="_IDGenButton2" text="OK" type="Emphasized" press="onCharacteristicsDialogOk"/>
+            <Button id="_IDGenButton5" text="Clear" press="onClearPress" type="Transparent" />
+            <Button id="_IDGenButton4" text="Cancel" press="onCharacteristicsDialogCancel"/>
+        </buttons>
+	</Dialog>
+</core:FragmentDefinition>

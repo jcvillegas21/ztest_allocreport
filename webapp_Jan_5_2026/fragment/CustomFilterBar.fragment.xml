@@ -1,0 +1,23 @@
+  <core:FragmentDefinition xmlns:form="sap.ui.layout.form" 
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:comp="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+    xmlns:t.rowmodes="sap.ui.table.rowmodes"
+    xmlns:uxap="sap.uxap"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"   
+   
+    
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:suite="sap.suite.ui.commons" >
+   
+        
+                	
+                </core:FragmentDefinition>
